@@ -9,4 +9,22 @@
         <item>Kapteeni käskee</item>
         <item>Askelkuvio</item>
     </string-array>
+    <string-array name="sequence_a">
+        <item>1</item>
+        <item>3</item>
+        <item>2</item>
+        <item>4</item>
+        <item>LRLR</item>
+    </string-array>
+    <string-array name="sequence_b">
+        <item>1</item>
+        <item>4</item>
+        <item>2</item>
+        <item>3</item>
+        <item>8</item>
+        <item>5</item>
+        <item>7</item>
+        <item>6</item>
+        <item>LRLRRLRL</item>
+    </string-array>
 </resources>

@@ -130,16 +130,19 @@
             android:layout_height="0dp"
             android:orientation="vertical"
             android:layout_weight="1"
-
+            android:padding="3dp"
             >
 
             <View
                 android:id="@+id/view"
-                android:background="@drawable/row_indicator"
-                android:layout_width="match_parent"
+                android:background="@color/game_default_bg"
+                android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:padding="3dp"
+
+                app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 />
