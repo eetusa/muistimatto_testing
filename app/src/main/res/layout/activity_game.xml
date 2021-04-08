@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".GameActivity">
+    <LinearLayout
+        android:id="@+id/bottomLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/game_default_bg"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/testLayout"
+        app:layout_constraintVertical_weight="2"></LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/rightLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/game_default_bg"
+        android:orientation="horizontal"
+
+        app:layout_constraintTop_toBottomOf="@+id/topLayout"
+        app:layout_constraintBottom_toTopOf="@+id/bottomLayout"
+
+        app:layout_constraintStart_toEndOf="@+id/testLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintVertical_weight="8"
+        app:layout_constraintHorizontal_weight="5"
+        ></LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/leftLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/game_default_bg"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/bottomLayout"
+        app:layout_constraintEnd_toStartOf="@+id/gameMarkersLeft"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topLayout"
+
+        app:layout_constraintVertical_weight="8"
+        app:layout_constraintHorizontal_weight="4"
+        ></LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/gameMarkersLeft"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/game_default_bg"
+        android:orientation="vertical"
+
+        app:layout_constraintTop_toBottomOf="@+id/topLayout"
+        app:layout_constraintBottom_toTopOf="@+id/bottomLayout"
+
+        app:layout_constraintStart_toEndOf="@+id/leftLayout"
+        app:layout_constraintEnd_toStartOf="@+id/testLayout"
+
+        app:layout_constraintVertical_weight="8"
+        app:layout_constraintHorizontal_weight="1"
+        >
+
+        <LinearLayout
+            android:id="@+id/row0"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:background="@color/game_default_bg"
+            >
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/row1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:background="@color/game_default_bg"
+            >
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/row2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:background="@color/game_default_bg"
+            >
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/row3"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:background="@color/game_default_bg"
+            >
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/row4"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:background="@color/game_default_bg"
+            >
+
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/row5"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:layout_weight="1"
+
+            >
+
+            <View
+                android:id="@+id/view"
+                android:background="@drawable/row_indicator"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:padding="3dp"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/topLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/game_default_bg"
+        android:orientation="vertical"
+
+        app:layout_constraintBottom_toTopOf="@+id/testLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:layout_constraintVertical_weight="2">
+
+        <TextView
+            android:id="@+id/scoreCounter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ongoingScore" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/testLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+
+        app:layout_constraintBottom_toTopOf="@+id/bottomLayout"
+        app:layout_constraintEnd_toStartOf="@+id/rightLayout"
+        app:layout_constraintStart_toEndOf="@+id/gameMarkersLeft"
+        app:layout_constraintTop_toBottomOf="@+id/topLayout"
+        app:layout_constraintVertical_weight="14"
+        app:layout_constraintHorizontal_weight="18">
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

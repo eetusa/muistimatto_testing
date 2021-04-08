@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/cell_border_centerline" /> <!-- border color -->
+        </shape>
+    </item>
+
+    <item android:right="2dp">
+
+        <shape android:shape="rectangle">
+            <solid android:color="@color/cell_border_default" /> <!-- border color -->
+        </shape>
+    </item>
+
+    <item
+        android:bottom="1dp"
+        android:left="2dp"
+        android:right="1dp">   <!-- adjust borders width here -->
+        <shape android:shape="rectangle">
+            <solid android:color="@color/cell_background_default" />  <!-- background color -->
+        </shape>
+    </item>
+</layer-list>

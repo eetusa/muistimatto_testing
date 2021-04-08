@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="ongoingScore">0</string>
+    <string name="startGameButton">Aloita Peli</string>
+    <string name="gameActivityName">Game</string>
+    <string name="appTitle">Ohjelman Nimi</string>
+    <string name="chooseGameModeTitle">Valitse pelimuoto</string>
+    <string-array name="gamemodes_array">
+        <item>Kapteeni käskee</item>
+        <item>Askelkuvio</item>
+    </string-array>
+</resources>
