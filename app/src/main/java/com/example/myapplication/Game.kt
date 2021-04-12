@@ -2,32 +2,31 @@ package com.example.myapplication
 
 import android.app.Activity
 import android.content.Context
+import android.os.Bundle
 import java.lang.Exception
 
 open class Game {
 
-    private var context: Context? = null
-    private var activity: Activity? = null
-    private var board: Board? = null
-    private var settings = IntArray(6){-1}
+    private var context: Context
+    private var activity: Activity
+    private var board: Board;
+    private lateinit var settings: Bundle;
 
 
-    constructor(context: Context, activity: Activity, board: Board, settings: IntArray){
+    constructor(context: Context, activity: Activity, board: Board, savedInstanceState: Bundle){
         this.context = context
         this.activity = activity
+        this.board = board;
 
-        for (i in 0 until settings.size){
-            try{
-                this.settings[i] = settings[i]
-            } catch (e: Exception){
-
-            }
-        }
+        settings = savedInstanceState;
 
         initializeGame()
     }
 
     open fun initializeGame(){
-
+        val mode: Int = settings.getInt("gamemode")
+        when (mode) {
+            0 -> { val gameRunner = StepSequenceGame(context, activity, board, settings) }
+        }
     }
 }

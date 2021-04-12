@@ -2,14 +2,10 @@ package com.example.myapplication
 
 import android.app.Activity
 import android.content.Context
-import android.graphics.Color
 import android.graphics.drawable.Drawable
-import android.util.Log
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
-import kotlin.math.roundToInt
 
 /**
  * TODO: document your custom view class.
@@ -17,12 +13,12 @@ import kotlin.math.roundToInt
 class Board : LinearLayout {
     private val columns = 4
     private val rows = 6
-    private var activeCellLeft: MemoryCell? = null
-    private var activeCellRight: MemoryCell? = null
+    private var activeCellLeft: MemoryCell2? = null
+    private var activeCellRight: MemoryCell2? = null
     private var Moves = ArrayList<Int>()
     private var Points = 0
     private var StepPercentage: Float = 0f
-    private var Cells = ArrayList<MemoryCell>()
+    private var Cells = ArrayList<MemoryCell2>()
     private var StepCompared = IntArray(88){0}
     private var correctSteps: Int = 0
     private var StepSequence: IntArray = intArrayOf(
@@ -71,7 +67,7 @@ class Board : LinearLayout {
         StepPercentage = temp*100
     }
 
-    fun clickReceiver(cell: MemoryCell){
+    fun clickReceiver(cell: MemoryCell2){
 
         if (cell.column > 1){
             this.setActiveRight(cell)
@@ -81,13 +77,13 @@ class Board : LinearLayout {
         addMove(cell.index)
     }
 
-    fun setActiveLeft(cell: MemoryCell){
+    fun setActiveLeft(cell: MemoryCell2){
         activeCellLeft?.setDefaultBg()
         cell.setActiveBg()
         activeCellLeft = cell
     }
 
-    fun setActiveRight(cell: MemoryCell){
+    fun setActiveRight(cell: MemoryCell2){
         activeCellRight?.setDefaultBg()
         cell.setActiveBg()
         activeCellRight = cell
@@ -120,7 +116,7 @@ class Board : LinearLayout {
             row.layoutParams = lp
 
             for (j in 0 until columns){
-                val cell = MemoryCell(context, i, j, this)
+                val cell = MemoryCell2(context, i, j, this)
                 row.addView(cell)
                 Cells.add(cell)
             }

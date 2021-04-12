@@ -6,13 +6,22 @@ import android.widget.LinearLayout
 
 class GameActivity : AppCompatActivity() {
 
-    private var settings = IntArray(6){-1}
+    private var settings = ArrayList<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_game)
-        val board: Board = createBoard()
-        val game: Game = Game(this, this, board, settings)
+
+
+        if (intent.extras != null){
+            println("täsä2")
+            startGame(intent.extras!!)
+        }
+
+
+
+
     }
 
     private fun createBoard(): Board{
@@ -22,4 +31,12 @@ class GameActivity : AppCompatActivity() {
 
         return board
     }
+
+    private fun startGame(savedInstanceState: Bundle){
+        val board: Board = createBoard()
+        val game: Game = Game(this, this, board, savedInstanceState)
+    }
+
+
+
 }

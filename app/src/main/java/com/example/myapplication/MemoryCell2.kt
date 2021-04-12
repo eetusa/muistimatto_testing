@@ -11,42 +11,54 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.util.TypedValue
 import android.view.Gravity
+import android.view.textservice.TextInfo
 import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.ColorUtils
+import org.w3c.dom.Text
 
 
 /**
  * Custom textview-class for board cells
  */
-class MemoryCell : androidx.appcompat.widget.AppCompatTextView {
+class MemoryCell2 : ConstraintLayout {
 
     var row = 0
     var column = 0
     private val cellAlphabet = "ABCDEFGHIJKLMNOPQRSTUVXY"
     private var letter = ""
     var index = 0
+
+
     private var board: Board? = null
     private var defaultColor: Int = Color.parseColor("#808080")
     private var defaultAlphabetColor: Int = defaultColor
     var bg: Drawable? = null
     var bg_active: Drawable? = null
+    private var contentView: TextView = TextView(context)
     private var Colors: IntArray = intArrayOf(
         Color.parseColor("#eeab04"), Color.parseColor("#76685f"), Color.parseColor(
             "#d80731"
         ), Color.parseColor("#03a1e0")
     )
     var selectedColor = defaultColor;
-
+    var defaultBgColor = ContextCompat.getColor(context, R.color.cell_background_default)
 
 
 
     constructor(context: Context, row: Int, column: Int, board: Board) : super(context) {
-       // init(null, 0)
+        // init(null, 0)
+
         this.row = row
         this.column = column
-        this.index = 21 - (row * 4)
+        this.index = 21 - (row * 4) + column
+        this.board = board
+
+
+
         try {
             this.letter = cellAlphabet.substring(index - 1, index);
         } catch (e: Exception) {
@@ -58,6 +70,7 @@ class MemoryCell : androidx.appcompat.widget.AppCompatTextView {
 
     constructor(context: Context, row: Int, column: Int) : super(context) {
         // init(null, 0)
+
         this.row = row
         this.column = column
         this.index = 21 - (row * 4) + column
@@ -75,21 +88,26 @@ class MemoryCell : androidx.appcompat.widget.AppCompatTextView {
         val tvparam = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT)
         tvparam.weight = 1f
         this.layoutParams = tvparam
+      //  this.setPadding(10,10,10,10)
 
-        this.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30f);
-        this.gravity = Gravity.RIGHT or Gravity.TOP
-        this.setPadding(0, 10, 20, 0)
+        val cwparam = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT)
+        cwparam.setMargins(20,20,20,20)
+        contentView.layoutParams = cwparam
+
+        contentView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30f);
+        contentView.gravity = Gravity.RIGHT or Gravity.TOP
+        contentView.setPadding(0, 10, 20, 0)
 
         initBg()
-        setDefaultBg()
+       //setDefaultBg()
         setAlphabetColor()
         setCellText()
+        this.addView(contentView)
 
 
-
-        //this.setOnClickListener(){
-         //   board?.clickReceiver(this)
-        //}
+        this.setOnClickListener(){
+            board?.clickReceiver(this)
+        }
 
     }
 
@@ -101,7 +119,7 @@ class MemoryCell : androidx.appcompat.widget.AppCompatTextView {
             indexText.length,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
-        this.text = indexText
+        contentView.text = indexText
 
         val alphabetText = SpannableString("$letter")
 
@@ -117,7 +135,7 @@ class MemoryCell : androidx.appcompat.widget.AppCompatTextView {
             alphabetText.length,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
-        this.append(alphabetText)
+        contentView.append(alphabetText)
     }
 
     private fun initBg(){
@@ -244,35 +262,49 @@ class MemoryCell : androidx.appcompat.widget.AppCompatTextView {
                     )
                 }
             }
-        }
 
+        }
+        this.background = bg;
     }
 
     fun setDefaultBg(){
-        this.background = bg
+        val valueAnimator = ValueAnimator.ofFloat(0.0f, 1.0f)
+        valueAnimator.duration = 325
+        valueAnimator.addUpdateListener { valueAnimator ->
+            val fractionAnim = valueAnimator.animatedValue as Float
+            contentView.setBackgroundColor(
+                ColorUtils.blendARGB(
+                    selectedColor,
+                    defaultBgColor,
+                    fractionAnim
+                )
+            )
+        }
+        valueAnimator.start()
+        //this.bg = bg
     }
 
     fun setActiveBg(){
-           // var fggw: LayerDrawable = resources.getDrawable(R.drawable.top_left_border) as LayerDrawable
-           // var d1: Drawable = fggw.findDrawableByLayerId(R.id.ggwp)
-            //d1.
+        // var fggw: LayerDrawable = resources.getDrawable(R.drawable.top_left_border) as LayerDrawable
+        // var d1: Drawable = fggw.findDrawableByLayerId(R.id.ggwp)
+        //d1.
 
 
-            val valueAnimator = ValueAnimator.ofFloat(0.0f, 1.0f)
-            valueAnimator.duration = 325
-            valueAnimator.addUpdateListener { valueAnimator ->
-                val fractionAnim = valueAnimator.animatedValue as Float
-                this.setBackgroundColor(
-                    ColorUtils.blendARGB(
-                        defaultColor,
-                        selectedColor,
-                        fractionAnim
-                    )
+        val valueAnimator = ValueAnimator.ofFloat(0.0f, 1.0f)
+        valueAnimator.duration = 200
+        valueAnimator.addUpdateListener { valueAnimator ->
+            val fractionAnim = valueAnimator.animatedValue as Float
+            contentView.setBackgroundColor(
+                ColorUtils.blendARGB(
+                    defaultBgColor,
+                    selectedColor,
+                    fractionAnim
                 )
-            }
-            valueAnimator.start()
+            )
+        }
+        valueAnimator.start()
 
-            //this.background = bg_active
+        //this.background = bg_active
 
 
     }
@@ -290,7 +322,7 @@ class MemoryCell : androidx.appcompat.widget.AppCompatTextView {
         }
     }
     public fun resetTextColor(){
-        this.setTextColor(defaultColor)
+        contentView.setTextColor(defaultColor)
     }
 
 
