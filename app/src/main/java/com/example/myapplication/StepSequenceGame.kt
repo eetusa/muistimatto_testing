@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.TextView
 import java.lang.Exception
+import kotlin.reflect.KProperty
 
 class StepSequenceGame : Game{
 
@@ -50,16 +51,22 @@ class StepSequenceGame : Game{
          testLayout.addView(board)
 
          getStepSequence()
+
+         board.Cells[0].setLeftFoot()
     }
 
-    private fun printDebug(str: String){
-        //debugTextView.append(::str.name + str)
+    private fun clearPrintDebug(){
+        debugTextView.text = ""
+    }
+
+    private fun <T> printDebug(str: T){
+        debugTextView.append(str.toString() + "\n")
     }
     private fun <T> printDebug(list: ArrayList<T> ){
         for (item in list){
-            debugTextView.append(" " + item.toString())
+            debugTextView.append(item.toString() + " ")
         }
-       // debugTextView.text = str
+        debugTextView.append("\n")
     }
 
 
@@ -105,11 +112,30 @@ class StepSequenceGame : Game{
 
         stepsInCurrentCycle.add(cell.index)
 
+
+        clearPrintDebug()
+        compareCurrentCycle(cell)
         printDebug(stepsInCurrentCycle)
+        printDebug("Points: " + Points.toString())
 
     }
 
+    private fun compareCurrentCycle(cell: MemoryCell2){
+        val index = stepsInCurrentCycle.size-1
 
+
+
+        if (index < stepSequenceUp.size){
+            val convertedStep = stepSequenceUp[index] + (currentCycleRow-1) * stepSequenceUp.size
+            //printDebug(stepSequenceUp[index].toString() + " . " + convertedStep.toString());
+            if (stepsInCurrentCycle[index] == convertedStep){
+                Points++
+            } else {
+                val convIndexForCells = board.Cells.size-1-currentCycleRow*board.columns+stepSequenceUp[index]
+                board.Cells[convIndexForCells].flashCorrect()
+            }
+        }
+    }
 
     override  fun  clickReceiver(cell: MemoryCell2){
 

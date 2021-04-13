@@ -38,17 +38,20 @@ class MemoryCell2 : ConstraintLayout {
     private var defaultAlphabetColor: Int = defaultColor
     var bg: Drawable? = null
 
+    var leftFoot: Drawable?;
+
 
 
     private var Colors: IntArray = intArrayOf(
-        Color.parseColor("#eeab04"), Color.parseColor("#76685f"), Color.parseColor(
+            Color.parseColor("#eeab04"), Color.parseColor("#76685f"), Color.parseColor(
             "#d80731"
-        ), Color.parseColor("#03a1e0")
+    ), Color.parseColor("#03a1e0")
     )
     var selectedColor = defaultColor;
     var defaultBgColor = ContextCompat.getColor(context, R.color.cell_background_default)
     var mistakeBgColor = ContextCompat.getColor(context, R.color.cell_background_mistake)
     var highlightBgColor = ContextCompat.getColor(context, R.color.cell_background_highlight)
+    var correctBgColor = ContextCompat.getColor(context, R.color.cell_background_green)
 
 
 
@@ -59,6 +62,7 @@ class MemoryCell2 : ConstraintLayout {
         this.column = column
         this.index = 21 - (row * 4) + column
 
+        leftFoot = ContextCompat.getDrawable(context, R.drawable.left_foot)
 
         try {
             this.letter = cellAlphabet.substring(index - 1, index);
@@ -79,8 +83,8 @@ class MemoryCell2 : ConstraintLayout {
       //  this.setPadding(10,10,10,10)
 
         val cwparam = ConstraintLayout.LayoutParams(
-            ConstraintLayout.LayoutParams.MATCH_PARENT,
-            ConstraintLayout.LayoutParams.MATCH_PARENT
+                ConstraintLayout.LayoutParams.MATCH_PARENT,
+                ConstraintLayout.LayoutParams.MATCH_PARENT
         )
         cwparam.setMargins(10, 10, 10, 10)
         contentView.layoutParams = cwparam
@@ -103,26 +107,26 @@ class MemoryCell2 : ConstraintLayout {
     private fun setCellText(){
         val indexText = SpannableString("$index ")
         indexText.setSpan(
-            ForegroundColorSpan(defaultColor),
-            0,
-            indexText.length,
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                ForegroundColorSpan(defaultColor),
+                0,
+                indexText.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
         contentView.text = indexText
 
         val alphabetText = SpannableString("$letter")
 
         alphabetText.setSpan(
-            ForegroundColorSpan(defaultAlphabetColor),
-            0,
-            alphabetText.length,
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                ForegroundColorSpan(defaultAlphabetColor),
+                0,
+                alphabetText.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
         alphabetText.setSpan(
-            StyleSpan(Typeface.BOLD),
-            0,
-            alphabetText.length,
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                StyleSpan(Typeface.BOLD),
+                0,
+                alphabetText.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
         contentView.append(alphabetText)
     }
@@ -147,44 +151,44 @@ class MemoryCell2 : ConstraintLayout {
             } else if ( this.column == 1 ){
                 if (this.row == 0){
                     bg = ResourcesCompat.getDrawable(
-                        resources,
-                        R.drawable.top_mid_left_border,
-                        null
+                            resources,
+                            R.drawable.top_mid_left_border,
+                            null
                     )
 
                 } else if (this.row == 5){
                     bg = ResourcesCompat.getDrawable(
-                        resources,
-                        R.drawable.bottom_mid_left_border,
-                        null
+                            resources,
+                            R.drawable.bottom_mid_left_border,
+                            null
                     )
 
                 } else {
                     bg = ResourcesCompat.getDrawable(
-                        resources,
-                        R.drawable.mid_mid_left_border,
-                        null
+                            resources,
+                            R.drawable.mid_mid_left_border,
+                            null
                     )
 
                 }
             } else if ( this.column == 2 ){
                 if (this.row == 0){
                     bg = ResourcesCompat.getDrawable(
-                        resources,
-                        R.drawable.top_mid_right_border,
-                        null
+                            resources,
+                            R.drawable.top_mid_right_border,
+                            null
                     )
                 } else if (this.row == 5){
                     bg = ResourcesCompat.getDrawable(
-                        resources,
-                        R.drawable.bottom_mid_right_border,
-                        null
+                            resources,
+                            R.drawable.bottom_mid_right_border,
+                            null
                     )
                 } else {
                     bg = ResourcesCompat.getDrawable(
-                        resources,
-                        R.drawable.mid_mid_right_border,
-                        null
+                            resources,
+                            R.drawable.mid_mid_right_border,
+                            null
                     )
                 }
             } else if ( this.column == 3 ){
@@ -193,9 +197,9 @@ class MemoryCell2 : ConstraintLayout {
 
                 } else if (this.row == 5){
                     bg = ResourcesCompat.getDrawable(
-                        resources,
-                        R.drawable.bottom_right_border,
-                        null
+                            resources,
+                            R.drawable.bottom_right_border,
+                            null
                     )
 
                 } else {
@@ -224,19 +228,64 @@ class MemoryCell2 : ConstraintLayout {
         setBGColor(highlightBgColor)
     }
 
+    fun flashMistake(){
+        flashBGColor(mistakeBgColor)
+    }
+
+    fun flashCorrect(){
+        flashBGColor(correctBgColor)
+    }
+
+    fun setLeftFoot(){
+        contentView.background = leftFoot
+    }
+
     fun setBGColor(color: Int){
         val valueAnimator = ValueAnimator.ofFloat(0.0f, 1.0f)
         valueAnimator.duration = 200
         valueAnimator.addUpdateListener { valueAnimator ->
             val fractionAnim = valueAnimator.animatedValue as Float
             contentView.setBackgroundColor(
-                ColorUtils.blendARGB(
-                    defaultBgColor,
-                    color,
-                    fractionAnim
-                )
+                    ColorUtils.blendARGB(
+                            defaultBgColor,
+                            color,
+                            fractionAnim
+                    )
             )
         }
+        valueAnimator.start()
+    }
+
+    fun flashBGColor(color: Int){
+        val valueAnimator = ValueAnimator.ofFloat(0.0f, 1.0f)
+        valueAnimator.duration = 200
+        valueAnimator.addUpdateListener { valueAnimator ->
+            val fractionAnim = valueAnimator.animatedValue as Float
+            contentView.setBackgroundColor(
+                    ColorUtils.blendARGB(
+                            defaultBgColor,
+                            color,
+                            fractionAnim
+                    )
+            )
+        }
+        valueAnimator.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                val valueAnimator = ValueAnimator.ofFloat(0.0f, 1.0f)
+                valueAnimator.duration = 200
+                valueAnimator.addUpdateListener { valueAnimator ->
+                    val fractionAnim = valueAnimator.animatedValue as Float
+                    contentView.setBackgroundColor(
+                            ColorUtils.blendARGB(
+                                    color,
+                                    defaultBgColor,
+                                    fractionAnim
+                            )
+                    )
+                }
+                valueAnimator.start()
+            }
+        })
         valueAnimator.start()
     }
 

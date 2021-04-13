@@ -16,6 +16,7 @@
     <color name="cell_background_active_right">#F4B41A</color>
     <color name="cell_background_mistake">#ff401f</color>
     <color name="cell_background_highlight">#d9ffff</color>
+    <color name="cell_background_green">#a8ffb8</color>
     <color name="cell_border_default">#747474</color>
     <color name="cell_border_centerline">#000000</color>
     <color name="game_default_bg">#ededed</color>
