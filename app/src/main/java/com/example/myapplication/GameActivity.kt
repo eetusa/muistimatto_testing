@@ -15,7 +15,6 @@ class GameActivity : AppCompatActivity() {
 
 
         if (intent.extras != null){
-            println("täsä2")
             startGame(intent.extras!!)
         }
 
@@ -23,7 +22,7 @@ class GameActivity : AppCompatActivity() {
 
 
     }
-
+/*
     private fun createBoard(): Board{
         val testLayout: LinearLayout = findViewById(R.id.testLayout)
         val board = Board(this, this)
@@ -31,10 +30,11 @@ class GameActivity : AppCompatActivity() {
 
         return board
     }
+*/
 
     private fun startGame(savedInstanceState: Bundle){
-        val board: Board = createBoard()
-        val game: Game = Game(this, this, board, savedInstanceState)
+        //val board: Board = createBoard()
+        val game: GameHandler = GameHandler(this, this, savedInstanceState)
     }
 
 

@@ -6,21 +6,26 @@ import android.graphics.drawable.Drawable
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
+import android.util.Log
 
 /**
  * TODO: document your custom view class.
  */
 class Board : LinearLayout {
-    private val columns = 4
-    private val rows = 6
+    val columns = 4
+    val rows = 6
+
     private var activeCellLeft: MemoryCell2? = null
     private var activeCellRight: MemoryCell2? = null
+    private var highlightedRow = 0
+
     private var Moves = ArrayList<Int>()
     private var Points = 0
     private var StepPercentage: Float = 0f
-    private var Cells = ArrayList<MemoryCell2>()
+    var Cells = ArrayList<MemoryCell2>()
     private var StepCompared = IntArray(88){0}
     private var correctSteps: Int = 0
+    var game: Game;
     private var StepSequence: IntArray = intArrayOf(
         1,4,2,3,
         8,5,7,6,
@@ -39,7 +44,7 @@ class Board : LinearLayout {
 
     var activityx: Activity? = null
 
-    constructor(context: Context, activity: Activity?) : super(context) {
+    constructor(context: Context, activity: Activity?, game: Game) : super(context) {
        this.layoutParams = LinearLayout.LayoutParams(
            LinearLayout.LayoutParams.MATCH_PARENT,
            LinearLayout.LayoutParams.MATCH_PARENT
@@ -47,6 +52,7 @@ class Board : LinearLayout {
         this.orientation = VERTICAL
         this.Points = Points
         this.background = bg
+        this.game = game;
         this.setPadding(20,40,40,20)
         activityx = activity
         initBoard(context)
@@ -68,13 +74,20 @@ class Board : LinearLayout {
     }
 
     fun clickReceiver(cell: MemoryCell2){
-
         if (cell.column > 1){
             this.setActiveRight(cell)
         } else {
             this.setActiveLeft(cell)
         }
         addMove(cell.index)
+    }
+
+    fun setActiveCell(cell: MemoryCell2){
+        if (cell.column > 1){
+            this.setActiveRight(cell)
+        } else {
+            this.setActiveLeft(cell)
+        }
     }
 
     fun setActiveLeft(cell: MemoryCell2){
@@ -103,6 +116,25 @@ class Board : LinearLayout {
         tv?.setText(StepPercentage.toString())
     }
 
+    fun highlightRow(row: Int){
+        var starting: Int = columns * row
+        if (Cells.size - rows >= starting-2 && row > -1){
+            for (i in starting until starting + columns){
+                if (!isCellSelected((Cells[i])))Cells[i].setHighlightBg()
+            }
+        }
+    }
+
+    fun setDefaultBGforNonactive(){
+        for (cell in Cells){
+            if (!isCellSelected(cell)) cell.setDefaultBg()
+        }
+    }
+
+     fun isCellSelected(cell: MemoryCell2): Boolean{
+        if (cell == activeCellRight || cell == activeCellLeft) return true
+        return false
+    }
 
 
     private fun initBoard(context: Context){
@@ -116,8 +148,11 @@ class Board : LinearLayout {
             row.layoutParams = lp
 
             for (j in 0 until columns){
-                val cell = MemoryCell2(context, i, j, this)
+                val cell = MemoryCell2(context, i, j)
                 row.addView(cell)
+                cell.setOnClickListener(){
+                    game.clickReceiver(cell)
+                }
                 Cells.add(cell)
             }
 
