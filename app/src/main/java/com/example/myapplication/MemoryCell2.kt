@@ -13,6 +13,7 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.util.TypedValue
 import android.view.Gravity
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -33,12 +34,14 @@ class MemoryCell2 : ConstraintLayout {
     var index = 0
 
     private var contentView: TextView = TextView(context)
+    private var contentBG: ImageView = ImageView(context)
 
     private var defaultColor: Int = Color.parseColor("#808080")
     private var defaultAlphabetColor: Int = defaultColor
-    var bg: Drawable? = null
 
+    var bg: Drawable? = null
     var leftFoot: Drawable?;
+    var rightFoot: Drawable?;
 
 
 
@@ -62,7 +65,8 @@ class MemoryCell2 : ConstraintLayout {
         this.column = column
         this.index = 21 - (row * 4) + column
 
-        leftFoot = ContextCompat.getDrawable(context, R.drawable.left_foot)
+        this.leftFoot = ContextCompat.getDrawable(context, R.drawable.left_foot)
+        this.rightFoot = ContextCompat.getDrawable(context, R.drawable.right_foot)
 
         try {
             this.letter = cellAlphabet.substring(index - 1, index);
@@ -93,10 +97,23 @@ class MemoryCell2 : ConstraintLayout {
         contentView.gravity = Gravity.RIGHT or Gravity.TOP
         contentView.setPadding(0, 10, 20, 0)
 
+        val bgparam = ConstraintLayout.LayoutParams(
+                ConstraintLayout.LayoutParams.MATCH_PARENT,
+                ConstraintLayout.LayoutParams.MATCH_PARENT
+        )
+
+        bgparam.topMargin=70
+        bgparam.bottomMargin=40
+        bgparam.leftToLeft = 0
+        contentBG.layoutParams = bgparam
+
+        contentBG.setImageDrawable(null)
+
         initBg()
         setAlphabetColor()
         setCellText()
         this.addView(contentView)
+        this.addView(contentBG)
 
 //        this.setOnClickListener(){
   //          game.clickReceiver(this)
@@ -237,7 +254,15 @@ class MemoryCell2 : ConstraintLayout {
     }
 
     fun setLeftFoot(){
-        contentView.background = leftFoot
+        contentBG.setImageDrawable(leftFoot)
+    }
+
+    fun setRightFoot(){
+        contentBG.setImageDrawable(rightFoot)
+    }
+
+    fun removeFoot(){
+        contentBG.setImageDrawable(null)
     }
 
     fun setBGColor(color: Int){
@@ -272,7 +297,7 @@ class MemoryCell2 : ConstraintLayout {
         valueAnimator.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator) {
                 val valueAnimator = ValueAnimator.ofFloat(0.0f, 1.0f)
-                valueAnimator.duration = 200
+                valueAnimator.duration = 800
                 valueAnimator.addUpdateListener { valueAnimator ->
                     val fractionAnim = valueAnimator.animatedValue as Float
                     contentView.setBackgroundColor(

@@ -19,8 +19,10 @@ class StepSequenceGame : Game{
 
     var stepSequenceUp = ArrayList<Int>()
     var stepSequenceDown = ArrayList<Int>()
-    var stepFootingUp = ArrayList<String>()
-    var stepFootingDown = ArrayList<String>()
+    var stepFootingUp: String = ""
+    var stepFootingDown: String = ""
+
+    var lastFootLeft: Boolean = false
 
     var direction = "up"
     var stepCycleIndex: Int = 1
@@ -52,7 +54,7 @@ class StepSequenceGame : Game{
 
          getStepSequence()
 
-         board.Cells[0].setLeftFoot()
+        // board.Cells[0].setLeftFoot()
     }
 
     private fun clearPrintDebug(){
@@ -71,7 +73,7 @@ class StepSequenceGame : Game{
 
 
     private fun getStepSequence(){
-        val steps = activity.resources.getStringArray(R.array.sequence_a)
+        val steps = activity.resources.getStringArray(R.array.sequence_b)
         var up: Boolean = true
         for (i in steps.indices){
             try {
@@ -92,10 +94,10 @@ class StepSequenceGame : Game{
             } catch (e: Exception){
                 if (up) {
                     println("up: " + steps[i])
-                    stepFootingUp.add(steps[i])
+                    stepFootingUp = steps[i]
                 } else {
                     println("down: " + steps[i])
-                    stepFootingDown.add(steps[i])
+                    stepFootingDown = steps[i]
                 }
                 up = false;
             }
@@ -103,7 +105,10 @@ class StepSequenceGame : Game{
     }
 
     private fun compareStep(cell: MemoryCell2){
-        var row = board.rows - cell.row;
+
+        clearPrintDebug()
+
+        val row = board.rows - cell.row;
 
         if (row > rowsOverInCycle + currentCycleRow){
             stepsInCurrentCycle.clear()
@@ -112,10 +117,11 @@ class StepSequenceGame : Game{
 
         stepsInCurrentCycle.add(cell.index)
 
-
-        clearPrintDebug()
         compareCurrentCycle(cell)
+
+
         printDebug(stepsInCurrentCycle)
+        printDebug("cyclerow" + currentCycleRow)
         printDebug("Points: " + Points.toString())
 
     }
@@ -123,24 +129,62 @@ class StepSequenceGame : Game{
     private fun compareCurrentCycle(cell: MemoryCell2){
         val index = stepsInCurrentCycle.size-1
 
-
-
         if (index < stepSequenceUp.size){
-            val convertedStep = stepSequenceUp[index] + (currentCycleRow-1) * stepSequenceUp.size
-            //printDebug(stepSequenceUp[index].toString() + " . " + convertedStep.toString());
+
+            val convertedStep = stepSequenceUp[index] + (currentCycleRow*board.columns / stepSequenceUp.size) * stepSequenceUp.size
+            printDebug("convste: " + convertedStep)
             if (stepsInCurrentCycle[index] == convertedStep){
+
                 Points++
+                cell.flashCorrect()
+                setFoot(stepFootingUp[index], cell)
             } else {
-                val convIndexForCells = board.Cells.size-1-currentCycleRow*board.columns+stepSequenceUp[index]
-                board.Cells[convIndexForCells].flashCorrect()
+
+                board.Cells[convertedStep-1].flashCorrect()
+                cell.flashMistake()
+                setFoot(cell)
             }
+
+            println(stepFootingUp[index])
+
+
+
+        } else {
+            cell.flashBGColor(cell.highlightBgColor)
+            setFoot(cell)
         }
+    }
+
+    fun setFoot(cell: MemoryCell2){
+        if (lastFootLeft){
+            lastFootLeft = false
+            cell.setRightFoot()
+            board.rightFoot = cell.index
+        } else {
+            lastFootLeft = true
+            cell.setLeftFoot()
+            board.leftFoot = cell.index
+        }
+        board.removeOldFeet()
+    }
+
+    fun setFoot(side: Char, cell: MemoryCell2){
+        if (side == 'L'){
+            cell.setLeftFoot()
+            lastFootLeft = true
+            board.leftFoot = cell.index
+        } else {
+            cell.setRightFoot()
+            lastFootLeft = false
+            board.rightFoot = cell.index
+        }
+        board.removeOldFeet()
     }
 
     override  fun  clickReceiver(cell: MemoryCell2){
 
-        board.setActiveCell(cell)
-        board.setDefaultBGforNonactive()
+      //  board.setActiveCell(cell)
+      //  board.setDefaultBGforNonactive()
         //board.highlightRow(cell.row)
 
         Moves.add(cell.index)

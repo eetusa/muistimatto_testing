@@ -23,6 +23,8 @@ class Board : LinearLayout {
     private var Points = 0
     private var StepPercentage: Float = 0f
     var Cells = ArrayList<MemoryCell2>()
+    var leftFoot = -1
+    var rightFoot = -1
     private var StepCompared = IntArray(88){0}
     private var correctSteps: Int = 0
     var game: Game;
@@ -125,6 +127,12 @@ class Board : LinearLayout {
         }
     }
 
+    fun removeOldFeet(){
+        for (cell in Cells){
+            if (cell.index != leftFoot && cell.index != rightFoot) cell.removeFoot()
+        }
+    }
+
     fun setDefaultBGforNonactive(){
         for (cell in Cells){
             if (!isCellSelected(cell)) cell.setDefaultBg()
@@ -157,6 +165,18 @@ class Board : LinearLayout {
             }
 
             this.addView(row)
+        }
+        sortCells()
+    }
+
+    private fun sortCells(){
+        var tempArr = ArrayList<MemoryCell2>()
+
+        for (i in 0 until Cells.size){
+            tempArr.add(Cells[i])
+        }
+        for (i in 0 until Cells.size){
+            Cells[tempArr[i].index-1] = tempArr[i]
         }
     }
 
