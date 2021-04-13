@@ -3,6 +3,9 @@ package com.example.myapplication
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
+import android.view.MotionEvent
+import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import java.lang.Exception
@@ -50,6 +53,7 @@ class StepSequenceGame : Game{
      private fun initializeGame() {
          val mode: Int = settings.getInt("gamemode")
          val testLayout: LinearLayout = activity.findViewById(R.id.testLayout)
+         testLayout.setOnTouchListener(handleTouch)
          testLayout.addView(board)
 
          getStepSequence()
@@ -189,6 +193,21 @@ class StepSequenceGame : Game{
 
         Moves.add(cell.index)
         compareStep(cell)
+        printDebug(board.centerLineX)
+    }
+
+
+    private val handleTouch = View.OnTouchListener { v, event ->
+        val x = event.x.toInt()
+        val y = event.y.toInt()
+        println("" + x + " " + y)
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> Log.i("TAG", "touched down")
+            MotionEvent.ACTION_MOVE -> Log.i("TAG", "moving: ($x, $y)")
+            MotionEvent.ACTION_UP -> Log.i("TAG", "touched up")
+        }
+        v.performClick()
+        false
     }
 
 
