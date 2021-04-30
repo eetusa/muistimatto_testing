@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Muistimatto</string>
     <string name="ongoingScore">0</string>
     <string name="startGameButton">Aloita Peli</string>
     <string name="gameActivityName">Game</string>
-    <string name="appTitle">Ohjelman Nimi</string>
+    <string name="appTitle"></string>
     <string name="chooseGameModeTitle">Valitse pelimuoto</string>
     <string name="start_new_game">Uusi peli</string>
     <string name="show_step_sequence">Näytä askelsarja</string>
