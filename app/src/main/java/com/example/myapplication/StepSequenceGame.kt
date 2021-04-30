@@ -90,7 +90,7 @@ class StepSequenceGame : Game{
 
          testLayout.addView(board)
 
-         getStepSequence()
+        // getStepSequence()
          getStepSequenceWhole()
          getAndShowRightFootOnUi(wholeStepFooting, 0)
          generateStepSymbols(gameSymbolAmount,gameDifficulty)
@@ -113,7 +113,7 @@ class StepSequenceGame : Game{
     }
 
     private fun getStepSequenceWhole(){
-        val steps = activity.resources.getString(R.string.seq_b)
+        val steps = activity.resources.getString(R.string.seq_a)
         var value = ""
         var index = 0
         for (i in steps){
@@ -272,9 +272,9 @@ class StepSequenceGame : Game{
 
     private fun compareStepThirdIteration(cell: MemoryCell2){
         clearPrintDebug()
-        printDebug(Moves.size.toString() + " " +wholeStepSequence.size.toString())
+       // printDebug(Moves.size.toString() + " " +wholeStepSequence.size.toString())
         if (Moves.size < wholeStepSequence.size+1){
-            if (Moves.size+1 < wholeStepSequence.size){
+            if (Moves.size < wholeStepSequence.size){
                 getAndShowRightFootOnUi(wholeStepFooting, Moves.size)
                 setStepSymbolsOnUI(stepSymbols,((Moves.size)%stepSymbols.size))
             }
@@ -287,6 +287,7 @@ class StepSequenceGame : Game{
             cell.flashBGColor(cell.highlightBgColor)
             setFoot(cell)
         }
+        printDebug("Points: $Points / ${wholeStepSequence.size}")
     }
 
     private fun compareStepRevised(cell: MemoryCell2){
@@ -537,6 +538,7 @@ class StepSequenceGame : Game{
         stepsInCurrentCycle.clear()
         currentSequenceRow = -1
         lastFootLeft = false
+        getAndShowRightFootOnUi(wholeStepFooting, 0)
         generateStepSymbols(gameSymbolAmount, gameDifficulty)
 
         Moves.clear()
