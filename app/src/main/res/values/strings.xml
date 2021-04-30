@@ -5,9 +5,14 @@
     <string name="gameActivityName">Game</string>
     <string name="appTitle">Ohjelman Nimi</string>
     <string name="chooseGameModeTitle">Valitse pelimuoto</string>
+    <string name="start_new_game">Uusi peli</string>
+    <string name="show_step_sequence">Näytä askelsarja</string>
+    <string name="show_step_sequence_active">Lopeta</string>
+    <string name="seq_b">1,4,2,3,8,5,7,6,9,12,10,11,16,13,15,14,17,20,18,19,24,21,23,22,17,20,18,19,16,13,15,14,9,12,10,11,8,5,7,6,1,4,2,3,LRLRRLRLLRLRRLRLLRLRRLRLLRLRRLRLLRLRRLRLLRLR,</string>
     <string-array name="gamemodes_array">
-        <item>Kapteeni käskee</item>
         <item>Askelkuvio</item>
+        <item>Kapteeni käskee</item>
+        <item>Päässälasku</item>
     </string-array>
     <string-array name="sequence_a">
         <item>1</item> // ylöspäin kuvio

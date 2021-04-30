@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Color
+import android.graphics.LightingColorFilter
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.text.Spannable
@@ -36,7 +37,7 @@ class MemoryCell2 : ConstraintLayout {
     private var contentView: TextView = TextView(context)
     private var contentBG: ImageView = ImageView(context)
 
-    private var defaultColor: Int = Color.parseColor("#808080")
+    private var defaultColor: Int = ContextCompat.getColor(context, R.color.text_default_color)
     private var defaultAlphabetColor: Int = defaultColor
 
     var bg: Drawable? = null
@@ -104,7 +105,7 @@ class MemoryCell2 : ConstraintLayout {
 
         bgparam.topMargin=70
         bgparam.bottomMargin=40
-        bgparam.leftToLeft = 0
+        bgparam.rightMargin = 40
         contentBG.layoutParams = bgparam
 
         contentBG.setImageDrawable(null)
@@ -253,11 +254,24 @@ class MemoryCell2 : ConstraintLayout {
         flashBGColor(correctBgColor)
     }
 
-    fun setLeftFoot(){
+    fun setLeftFoot(whiten: Boolean = false){
+        if (whiten){
+            val lightingColorFilter = LightingColorFilter(0x77777777, 0x30FFFFFF)
+            leftFoot?.colorFilter = lightingColorFilter
+        } else {
+            leftFoot?.colorFilter = null
+        }
+
         contentBG.setImageDrawable(leftFoot)
     }
 
-    fun setRightFoot(){
+    fun setRightFoot(whiten: Boolean = false){
+        if (whiten){
+            val lightingColorFilter = LightingColorFilter(0x77777777, 0x30FFFFFF)
+            rightFoot?.colorFilter = lightingColorFilter
+        } else {
+            rightFoot?.colorFilter = null
+        }
         contentBG.setImageDrawable(rightFoot)
     }
 
@@ -335,3 +349,5 @@ class MemoryCell2 : ConstraintLayout {
 
 
 }
+
+

@@ -3,12 +3,17 @@ package com.example.myapplication
 import android.app.Activity
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View.OnTouchListener
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 
 
 /**
@@ -39,20 +44,7 @@ class Board : LinearLayout {
     private var StepCompared = IntArray(88){0}
     private var correctSteps: Int = 0
     var game: Game;
-    private var StepSequence: IntArray = intArrayOf(
-            1, 4, 2, 3,
-            8, 5, 7, 6,
-            9, 12, 10, 11,
-            16, 13, 15, 14,
-            17, 20, 18, 19,
-            24, 21, 23, 22,
-            24, 21, 23, 22,
-            17, 20, 18, 19,
-            16, 13, 15, 14,
-            9, 12, 10, 11,
-            8, 5, 7, 6,
-            1, 4, 2, 3
-    )
+
     var bg: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.all_borders, null)
 
     var activityx: Activity? = null
@@ -91,14 +83,6 @@ class Board : LinearLayout {
         StepPercentage = temp*100
     }
 
-    fun clickReceiver(cell: MemoryCell2){
-        if (cell.column > 1){
-            this.setActiveRight(cell)
-        } else {
-            this.setActiveLeft(cell)
-        }
-        addMove(cell.index)
-    }
 
     fun setActiveCell(cell: MemoryCell2){
         if (cell.column > 1){
@@ -120,13 +104,7 @@ class Board : LinearLayout {
         activeCellRight = cell
     }
 
-    fun addMove(value: Int){
-        Moves.add(value)
-        Points++
-        compareStepSimple(Moves.size, StepSequence)
-        calculateStepPercentage()
-        updateAll()
-    }
+
 
     fun updateAll(){
         var tv: TextView? = this.activityx?.findViewById(R.id.scoreCounter)
@@ -160,7 +138,21 @@ class Board : LinearLayout {
         return false
     }
 
+    fun flashSequence(){
 
+    }
+
+
+      /*
+            var wat = CoroutineScope(Dispatchers.IO).launch {
+                delay(TimeUnit.SECONDS.toMillis(3))
+                withContext(Dispatchers.Main) {
+                    Log.i("TAG", "this will be called after 3 seconds")
+                    finish()
+                }
+            }
+
+*/
 
 
     private fun initBoard(context: Context){

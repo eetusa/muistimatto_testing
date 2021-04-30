@@ -21,4 +21,5 @@
     <color name="cell_border_centerline">#000000</color>
     <color name="game_default_bg">#ededed</color>
     <color name="row_indicator">#48b3ff</color>
+    <color name="text_default_color">#808080</color>
 </resources>

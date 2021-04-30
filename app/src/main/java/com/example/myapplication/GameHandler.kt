@@ -8,6 +8,7 @@ class GameHandler {
     private var context: Context
     private var activity: Activity
     private lateinit var settings: Bundle;
+    private var gameRunner: Game? = null;
 
 
     constructor(context: Context, activity: Activity, savedInstanceState: Bundle){
@@ -19,8 +20,18 @@ class GameHandler {
 
     open fun startGame(){
         val mode: Int = settings.getInt("gamemode")
-        when (mode) {
-            0 -> { val gameRunner = StepSequenceGame(context, activity, settings) }
+        if (gameRunner == null){
+            when (mode) {
+                0 -> { gameRunner = StepSequenceGame(context, activity, settings) }
+            }
+        } else {
+            gameRunner!!.newGame()
+        }
+
+    }
+    fun showSteps(){
+        if (gameRunner != null){
+            gameRunner!!.showStepsToggle()
         }
     }
 }
