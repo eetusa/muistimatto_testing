@@ -113,7 +113,7 @@ class StepSequenceGame : Game{
     }
 
     private fun getStepSequenceWhole(){
-        val steps = activity.resources.getString(R.string.seq_a)
+        val steps = activity.resources.getString(R.string.seq_b)
         var value = ""
         var index = 0
         for (i in steps){
@@ -334,7 +334,7 @@ class StepSequenceGame : Game{
     }
 
     private fun generateStepSymbols(n: Int, difficulty: Int){
-        val symbol_set: Array<String> = arrayOf("Numero","Kirjain","Väri","Elementti")
+        val symbol_set: Array<String> = arrayOf("Numero","Kirjain","Väri","Symboli")
         var diff_index = symbol_set.size - (2 - difficulty)
         if (diff_index > symbol_set.size) diff_index = symbol_set.size
 
