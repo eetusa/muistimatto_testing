@@ -95,7 +95,46 @@ class StepSequenceGame : Game{
          getAndShowRightFootOnUi(wholeStepFooting, 0)
          generateStepSymbols(gameSymbolAmount,gameDifficulty)
         // setStepSymbolsOnUI(stepSymbols, 0)
+         createRandomStepSequence()
 
+    }
+
+    private fun createRandomStepSequence(){
+        val stepsPerRow = 4
+
+        var row = 0
+        var rowsteps = ArrayList<Int>()
+        var randomSteps = ArrayList<Int>()
+
+        while (randomSteps.size < stepsPerRow*6){
+            while(randomSteps.size < stepsPerRow*(row+1)){
+                val random = row*stepsPerRow+Random.nextInt(4)+1
+                if (randomSteps.indexOf(random) == -1){
+                    randomSteps.add(random)
+                }
+            }
+            row++;
+        }
+        row--
+        while (randomSteps.size < stepsPerRow*11){
+
+            row--
+
+            while(rowsteps.size < stepsPerRow){
+                val random = row*stepsPerRow+Random.nextInt(4)+1
+                if (rowsteps.indexOf(random) == -1){
+                    rowsteps.add(random)
+                    randomSteps.add(random)
+                }
+            }
+
+            rowsteps.clear()
+        }
+
+        printDebug("rowsteps",randomSteps)
+
+        if (wholeStepSequence.size>0)wholeStepSequence.clear()
+        wholeStepSequence.apply {  addAll(randomSteps) }
     }
 
     private fun clearPrintDebug(){
@@ -105,7 +144,20 @@ class StepSequenceGame : Game{
     private fun <T> printDebug(str: T){
         debugTextView.append(str.toString() + "\n")
     }
+
+    private fun <T> printDebug(tag: String, str: T){
+        debugTextView.append("\n'$tag':\n")
+        debugTextView.append(str.toString() + "\n")
+    }
+
     private fun <T> printDebug(list: ArrayList<T> ){
+        for (item in list){
+            debugTextView.append(item.toString() + " ")
+        }
+        debugTextView.append("\n")
+    }
+    private fun <T> printDebug(tag: String, list: ArrayList<T> ){
+        debugTextView.append("\n'$tag':\n")
         for (item in list){
             debugTextView.append(item.toString() + " ")
         }
@@ -288,6 +340,7 @@ class StepSequenceGame : Game{
             setFoot(cell)
         }
         printDebug("Points: $Points / ${wholeStepSequence.size}")
+        printDebug("Steps",wholeStepSequence)
     }
 
     private fun compareStepRevised(cell: MemoryCell2){
@@ -560,6 +613,11 @@ class StepSequenceGame : Game{
             compareStepThirdIteration(cell)
            // printDebug(board.centerLineX)
         }
+        printDebug("row",cell.row)
+        printDebug("column",cell.column)
+        printDebug("letter",cell.letter)
+        printDebug("color",cell.defaultAlphabetColor)
+
 
     }
 

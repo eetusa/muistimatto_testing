@@ -31,14 +31,14 @@ class MemoryCell2 : ConstraintLayout {
     var row = 0
     var column = 0
     private val cellAlphabet = "ABCDEFGHIJKLMNOPQRSTUVXY"
-    private var letter = ""
+    var letter = ""
     var index = 0
 
     private var contentView: TextView = TextView(context)
     private var contentBG: ImageView = ImageView(context)
 
     private var defaultColor: Int = ContextCompat.getColor(context, R.color.text_default_color)
-    private var defaultAlphabetColor: Int = defaultColor
+    var defaultAlphabetColor: Int = defaultColor
 
     var bg: Drawable? = null
     var leftFoot: Drawable?;
