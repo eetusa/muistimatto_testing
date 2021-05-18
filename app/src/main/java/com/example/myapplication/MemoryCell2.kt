@@ -56,6 +56,9 @@ class MemoryCell2 : ConstraintLayout {
     var mistakeBgColor = ContextCompat.getColor(context, R.color.cell_background_mistake)
     var highlightBgColor = ContextCompat.getColor(context, R.color.cell_background_highlight)
     var correctBgColor = ContextCompat.getColor(context, R.color.cell_background_green)
+    var color = "null";
+    var symbol = "null";
+    var colorIndex = -1;
 
 
 
@@ -334,12 +337,24 @@ class MemoryCell2 : ConstraintLayout {
     fun setAlphabetColor(){
         if ( (this.column + this.row * 1) % 4 == 0){
             defaultAlphabetColor = Colors[3]
+            color = "sininen"
+            symbol = "vesi"
+            colorIndex = 3
         } else if ((this.column + this.row * 1)% 4 == 1){
             defaultAlphabetColor = Colors[0]
+            color = "keltainen"
+            symbol = "valo"
+            colorIndex = 0
         }else if ((this.column + this.row * 1)% 4 == 2){
             defaultAlphabetColor = Colors[1]
+            color = "harmaa"
+            symbol = "kivi"
+            colorIndex = 1
         }else if ((this.column + this.row * 1)% 4 == 3){
             defaultAlphabetColor = Colors[2]
+            color = "punainen"
+            symbol = "tuli"
+            colorIndex = 2
         }
     }
     public fun resetTextColor(){

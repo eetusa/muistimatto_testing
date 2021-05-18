@@ -262,7 +262,7 @@
                     android:paddingRight="10dp"
                     android:paddingBottom="0dp"
                     android:text="väri numero kirjain"
-                    android:textSize="32sp"
+                    android:textSize="26sp"
                     android:textColor="@color/text_default_color"
                     />
             </LinearLayout><![CDATA[

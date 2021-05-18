@@ -2,27 +2,34 @@ package com.example.myapplication
 
 import android.app.Activity
 import android.content.Context
+import android.content.res.AssetFileDescriptor
 import android.graphics.Typeface
+import android.media.MediaMetadataRetriever
+import android.media.MediaPlayer
+import android.os.Build
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.util.Log
-import android.view.MotionEvent
-import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.lang.Exception
+import java.io.File
+import java.io.IOException
+import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.random.Random
-import kotlin.reflect.KProperty
+
 
 class StepSequenceGame : Game{
 
@@ -35,6 +42,8 @@ class StepSequenceGame : Game{
 
     private var gameDifficulty = 2
     private var gameSymbolAmount = 2
+
+    private var indexOfLastClue = -1
 
     var stepSequenceUp = ArrayList<Int>()
     var stepSequenceDown = ArrayList<Int>()
@@ -51,12 +60,25 @@ class StepSequenceGame : Game{
 
     var lastFootLeft: Boolean = false
     var showingStepSequence: Job? = null
+    var playingSoundSequence: Job? = null
 
     var directionIsUp = true
     var stepCycleIndex: Int = 1
     var currentCycleRow = 1;
     var rowsOverInCycle = 0
     var stepsInCurrentCycle = ArrayList<Int>()
+
+    var harmaaSound: AssetFileDescriptor? = null
+    var punainenSound: AssetFileDescriptor? = null
+    var sininenSound: AssetFileDescriptor? = null
+    var keltainenSound: AssetFileDescriptor? = null
+    var player: MediaPlayer? = null
+
+    var elementSoundsArray = ArrayList<ArrayList<AssetFileDescriptor>>() // väri, kirjain, numero, symboli
+    var orderSoundsArray = ArrayList<ArrayList<AssetFileDescriptor>>()
+
+    var mediaPlayerQueue = ArrayList<MediaPlayer>()
+    var mediaPlayerJobQueue = ArrayList<Job>()
 
     private var stepSymbols = ArrayList<String>()
 
@@ -67,6 +89,9 @@ class StepSequenceGame : Game{
     private var Moves = ArrayList<Int>()
     private var Points = 0
 
+    var tts: TextToSpeech? = null
+
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     constructor(context: Context, activity: Activity, savedInstanceState: Bundle){
         this.context = context
         this.activity = activity
@@ -82,6 +107,223 @@ class StepSequenceGame : Game{
         textcolor_selected = ContextCompat.getColor(context, R.color.material_on_background_emphasis_high_type)
 
         initializeGame()
+        initializeSoundsAndPlayer()
+
+        tts = TextToSpeech(context, TextToSpeech.OnInitListener { i ->
+            if (i == TextToSpeech.SUCCESS) {
+                val result = tts!!.setLanguage(Locale.ENGLISH)
+                if (result == TextToSpeech.LANG_MISSING_DATA
+                    || result == TextToSpeech.LANG_NOT_SUPPORTED
+                ) {
+                    for (item in tts!!.availableLanguages){
+                        println(item.language)
+                    }
+                    Log.e("TTS", "Language Not Supported")
+                } else {
+                   // tts!!.setSpeechRate(0.5f)
+                    ConvertTextToSpeech("Game Start")
+                    Log.e("TTS", "vittu")
+                }
+            } else {
+                Log.e("TTS", "Initialization Failed " + i.toString())
+            }
+        })
+    }
+
+    fun initializeSoundsAndPlayer(){
+
+        player = MediaPlayer()
+
+        if (elementSoundsArray!=null)elementSoundsArray.clear()
+
+        elementSoundsArray.add(ArrayList<AssetFileDescriptor>()) // väri (keltainen, harmaa, punainen, sininen)
+        elementSoundsArray.add(ArrayList<AssetFileDescriptor>()) // kirjain (a, b,..)
+        elementSoundsArray.add(ArrayList<AssetFileDescriptor>()) // numero (1, 2,...)
+        elementSoundsArray.add(ArrayList<AssetFileDescriptor>()) // symboli (vesi, tuli, valo, kivi)
+
+        orderSoundsArray.add(ArrayList<AssetFileDescriptor>()) // (ensimmäisen, toisen..)
+        orderSoundsArray.add(ArrayList<AssetFileDescriptor>()) // (ensimmäinen, toinen..)
+        orderSoundsArray.add(ArrayList<AssetFileDescriptor>()) // rivin
+        orderSoundsArray.add(ArrayList<AssetFileDescriptor>()) // ruutu
+
+        var letters = arrayListOf<String>("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","x","y")
+
+
+        try{
+            elementSoundsArray[0].add(context.assets.openFd("sounds/keltainen.mp3"))
+            elementSoundsArray[0].add(context.assets.openFd("sounds/harmaa.mp3"))
+            elementSoundsArray[0].add(context.assets.openFd("sounds/punainen.mp3"))
+            elementSoundsArray[0].add(context.assets.openFd("sounds/sininen.mp3"))
+
+
+
+            for (letter in letters){
+                elementSoundsArray[1].add(context.assets.openFd("sounds/$letter.mp3"))
+            }
+
+            for (i in 1..10){
+                elementSoundsArray[2].add(context.assets.openFd("sounds/$i.mp3"))
+            }
+            elementSoundsArray[2].add(context.assets.openFd("sounds/toista.mp3"))
+            elementSoundsArray[2].add(context.assets.openFd("sounds/20.mp3"))
+
+
+            elementSoundsArray[3].add(context.assets.openFd("sounds/valo.mp3"))
+            elementSoundsArray[3].add(context.assets.openFd("sounds/kivi.mp3"))
+            elementSoundsArray[3].add(context.assets.openFd("sounds/tuli.mp3"))
+            elementSoundsArray[3].add(context.assets.openFd("sounds/vesi.mp3"))
+
+            orderSoundsArray[0].add(context.assets.openFd("sounds/ensimmaisen.mp3"))
+            orderSoundsArray[0].add(context.assets.openFd("sounds/toisen.mp3"))
+            orderSoundsArray[0].add(context.assets.openFd("sounds/kolmannen.mp3"))
+            orderSoundsArray[0].add(context.assets.openFd("sounds/neljannen.mp3"))
+            orderSoundsArray[0].add(context.assets.openFd("sounds/viidennen.mp3"))
+            orderSoundsArray[0].add(context.assets.openFd("sounds/kuudennen.mp3"))
+            orderSoundsArray[1].add(context.assets.openFd("sounds/ensimmainen.mp3"))
+            orderSoundsArray[1].add(context.assets.openFd("sounds/toinen.mp3"))
+            orderSoundsArray[1].add(context.assets.openFd("sounds/kolmas.mp3"))
+            orderSoundsArray[1].add(context.assets.openFd("sounds/neljas.mp3"))
+            orderSoundsArray[1].add(context.assets.openFd("sounds/viides.mp3"))
+            orderSoundsArray[1].add(context.assets.openFd("sounds/kuudes.mp3"))
+            orderSoundsArray[2].add(context.assets.openFd("sounds/rivin.mp3"))
+            orderSoundsArray[3].add(context.assets.openFd("sounds/ruutu.mp3"))
+
+
+
+
+        } catch (e: java.lang.Exception){
+            e.message?.let { Log.e("Sounds", it) }
+        }
+
+
+
+
+        playSound(elementSoundsArray[0],0)
+
+    }
+
+    fun playSound(soundArray: ArrayList<AssetFileDescriptor>, index: Int){
+        try{
+
+            if (soundArray != null){
+                val playerx = MediaPlayer()
+                playerx.setOnCompletionListener {
+                    playerx.reset()
+                    playerx.release()
+                    mediaPlayerQueue.remove(playerx)
+                }
+                mediaPlayerQueue.add(playerx)
+                if (index < soundArray.count()){
+
+                    var sound = soundArray[index]
+
+                    if (sound != null) {
+                        //if (playerx.isPlaying == true) playerx.stop()
+
+                      //  playerx.reset()
+                        playerx.setDataSource(sound.fileDescriptor, sound.startOffset, sound.length)
+                        playerx.prepare()
+                        playerx.start()
+                       // Log.i("sound duration", player?.duration.toString())
+                    }
+                }
+            }
+        } catch (e: java.lang.Exception){
+            e.message?.let { Log.i("sound", it) }
+        }
+
+
+    }
+
+    fun playSoundsInSequence(soundArray: ArrayList<AssetFileDescriptor>, runningIndex: Int){
+        //playingSoundSequence?.cancel()
+
+        try{
+            if (soundArray != null){
+                if (soundArray.count() <= runningIndex) return
+
+                var durations: ArrayList<Int> = getDurations(soundArray)
+                Log.i("durations",  "Count: "+durations.count().toString())
+                for (item in durations){
+                    Log.i("durations",item.toString())
+                }
+                mediaPlayerJobQueue.add(viewModelScope.launch {
+                   // Log.i("recursive sound play",runningIndex.toString()+  " " + soundArray.count().toString())
+                 //   playSound(soundArray,runningIndex)
+
+                  //  player?.setOnCompletionListener {
+                  //      playSoundsInSequence(soundArray,runningIndex+1)
+                        //player?.setOnCompletionListener {  }
+                  //   }
+                    /*
+                    player?.setOnCompletionListener { fun onCompletion(player: MediaPlayer){
+                        playSound(soundArray,1)
+                        player?.setOnCompletionListener {  }
+                    } }
+
+                     */
+
+                    for ((index, item) in soundArray.withIndex()){
+                        playSound(soundArray, index)
+                        delay((durations[index]*0.8).toLong())
+
+                    }
+
+                })
+
+               // mediaPlayerJobQueue.add(this)
+
+
+            }
+        } catch (e: java.lang.Exception){
+            e.message?.let { Log.i("sound", it) }
+        }
+    }
+
+    private fun getDurations(soundArray: ArrayList<AssetFileDescriptor>): ArrayList<Int>{
+        var durations = ArrayList<Int>()
+        for (item in soundArray){
+          //  if (player?.isPlaying == true) player?.stop()
+          //  player?.reset()
+          //  player?.setDataSource(item.fileDescriptor, item.startOffset, item.length)
+           // player?.duration?.let { durations.add(it) }
+             //  var file = getFileFromAssets(context,"harmaa.mp3")
+               var dur = getDuration(item)
+            if (dur != null) {
+                durations.add(dur.toInt())
+            }
+           // durations.add(item.declaredLength.toInt())
+        }
+       // player?.reset()
+        return durations
+    }
+    private fun getDuration(file: AssetFileDescriptor): String? {
+        val mediaMetadataRetriever = MediaMetadataRetriever()
+        mediaMetadataRetriever.setDataSource(file.fileDescriptor,file.startOffset,file.length);
+        return mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
+    }
+
+    @Throws(IOException::class)
+    fun getFileFromAssets(context: Context, fileName: String): File = File(context.cacheDir, fileName)
+        .also {
+            if (!it.exists()) {
+                it.outputStream().use { cache ->
+                    context.assets.open(fileName).use { inputStream ->
+                        inputStream.copyTo(cache)
+                    }
+                }
+            }
+        }
+
+    fun ConvertTextToSpeech(text2: String) {
+        // TODO Auto-generated method stub
+        Log.i("voice","testing")
+        var text = text2
+
+        if (text == null || "" == text) {
+            text = "Content not available"
+            tts!!.speak(text, TextToSpeech.QUEUE_FLUSH, null)
+        } else tts!!.speak(text.toString(), TextToSpeech.QUEUE_FLUSH, null)
     }
 
      private fun initializeGame() {
@@ -410,6 +652,99 @@ class StepSequenceGame : Game{
         else setStepSymbolsOnUI(stepSymbols, 0)
     }
 
+    private fun stopMediaPlayers(){
+        for (player in mediaPlayerQueue){
+            if (player!=null){
+                player.stop()
+           }
+        }
+        mediaPlayerJobQueue.clear()
+
+        for (playerJob in mediaPlayerJobQueue){
+            if (playerJob!=null){
+                playerJob.cancelChildren()
+                playerJob.cancel()
+                Log.i("job","canceled")
+            }
+        }
+        mediaPlayerJobQueue.clear()
+    }
+
+    private fun giveClueFromCell(dif: Int, cell: MemoryCell2): String{
+
+        stopMediaPlayers()
+        Log.i("Calling clue","calling")
+        val clueArray = ArrayList<String>()
+        val orderRowNumbers: Array<String> = arrayOf("ensimmäisen","toisen","kolmannen","neljännen","viidennen","kuudennen")
+        val orderColumnNumbers: Array<String> = arrayOf("ensimmäinen","toinen","kolmas","neljäs")
+        val columnAndRow: String = orderRowNumbers[5-cell.row] + " rivin " + orderColumnNumbers[cell.column] + " ruutu"
+        val toistaIndex = 10
+
+        clueArray.add(cell.color)
+        clueArray.add(cell.letter)
+        clueArray.add(cell.index.toString())
+        clueArray.add(cell.symbol)
+
+        clueArray.add(columnAndRow)
+        var random = -2
+        while(true){
+            random = Random.nextInt(clueArray.size)
+            if (random != indexOfLastClue){
+                indexOfLastClue = random;
+                break;
+            }
+        }
+
+        if (random < 4 && random > -1){
+
+        }
+        if (random == 0 || random == 3){
+            playSound(elementSoundsArray[random], cell.colorIndex)
+        } else if (random == 1) {
+            playSound(elementSoundsArray[random], cell.index - 1)
+        }else if (random == 2){
+            if (cell.index < 11){
+                playSound(elementSoundsArray[random], cell.index-1)
+            } else if (cell.index in 11..19){
+                var temporaryArray = ArrayList<AssetFileDescriptor>()
+                var firstIndex = cell.index-11
+                try{
+                    temporaryArray.add(elementSoundsArray[2][firstIndex])
+                    temporaryArray.add(elementSoundsArray[2][toistaIndex])
+                    playSoundsInSequence(temporaryArray,0)
+                } catch (e: java.lang.Exception){
+                    e.message?.let { Log.e("sound clue", it) }
+                }
+
+            }
+        } else if (random == 4){
+            var temporaryArray = ArrayList<AssetFileDescriptor>()
+            try{
+                temporaryArray.add(orderSoundsArray[0][5-cell.row])
+                temporaryArray.add(orderSoundsArray[2][0])
+                temporaryArray.add(orderSoundsArray[1][cell.column])
+                temporaryArray.add(orderSoundsArray[3][0])
+                playSoundsInSequence(temporaryArray,0)
+            } catch (e: java.lang.Exception){
+                    e.message?.let { Log.e("sound clue", it) }
+            }
+        }
+
+        if (tts!==null){
+            //ConvertTextToSpeech(clueArray[random])
+        }
+        return clueArray[random];
+    }
+
+    private fun showNextStepOnUI(arrayList: ArrayList<Int>, index: Int, cells: ArrayList<MemoryCell2>){
+        val footview: TextView = activity.findViewById(R.id.whichSymbolsTextView)
+     //   Log.i("LOL",""+cells[arrayList[index]-1].index)
+        if (index < arrayList.size){
+            footview.text = giveClueFromCell(gameDifficulty,cells[arrayList[index]-1]);
+        }
+
+    }
+
     private fun setStepSymbolsOnUI(arrayList: ArrayList<String>, activeIndex: Int){
         val footview: TextView = activity.findViewById(R.id.whichSymbolsTextView)
         var color: Int
@@ -612,11 +947,13 @@ class StepSequenceGame : Game{
             Moves.add(cell.index)
             compareStepThirdIteration(cell)
            // printDebug(board.centerLineX)
+            showNextStepOnUI(wholeStepSequence, Moves.size,board.Cells);
         }
-        printDebug("row",cell.row)
-        printDebug("column",cell.column)
+        printDebug("row",6-cell.row)
+        printDebug("column",cell.column+1)
         printDebug("letter",cell.letter)
-        printDebug("color",cell.defaultAlphabetColor)
+        printDebug("color",cell.color)
+        printDebug("number",cell.index)
 
 
     }
