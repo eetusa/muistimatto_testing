@@ -14,11 +14,13 @@ import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -70,11 +72,9 @@ class OrderSequenceGame : Game{
     private var textcolor_nonselected: Int = 0
     private var textcolor_selected: Int = 0
 
+    private var orderRow = 1
     private var Moves = ArrayList<Int>()
     private var Points = 0
-
-    private var gameOn: Boolean = false
-    private var gamePlayed: Boolean = false
 
     @RequiresApi(Build.VERSION_CODES.O)
     private var startTime = Instant.now()
@@ -252,12 +252,14 @@ class OrderSequenceGame : Game{
         val testLayout: LinearLayout = activity.findViewById(R.id.testLayout)
 
         testLayout.addView(board)
+        clearTimer()
+        clearNextStepOnUI()
 
         // getAndShowRightFootOnUi(wholeStepFooting, 0)
        // generateStepSymbols(gameSymbolAmount,gameDifficulty)
         // setStepSymbolsOnUI(stepSymbols, 0)
         createRandomStepSequence()
-        showNextStepOnUI(wholeStepSequence, Moves.size,board.Cells);
+       // showNextStepOnUI(wholeStepSequence, Moves.size,board.Cells);
     }
 
     private fun createRandomStepSequence(){
@@ -375,6 +377,14 @@ class OrderSequenceGame : Game{
         }
 
 
+    }
+
+    private fun getOrderRow(): Int{
+        if (Moves.size < wholeStepSequence.size){
+            return (wholeStepSequence[Moves.size]-1)/board.columns+1
+        }
+
+        return -1
     }
 
     private fun compareStepThirdIteration(cell: MemoryCell2){
@@ -510,6 +520,7 @@ class OrderSequenceGame : Game{
     private fun showNextStepOnUI(arrayList: ArrayList<Int>, index: Int, cells: ArrayList<MemoryCell2>){
         val footview: TextView = activity.findViewById(R.id.whichSymbolsTextView)
         //   Log.i("LOL",""+cells[arrayList[index]-1].index)
+        indicateRow()
         if (index < arrayList.size){
             footview.text = giveClueFromCell(gameDifficulty,cells[arrayList[index]-1]);
         }
@@ -527,7 +538,7 @@ class OrderSequenceGame : Game{
         timerJob = viewModelScope.launch {
 
             while(true){
-                delay(100L)
+                delay(10L)
                 writeToMidTopLeft(getTimeFromStart())
             }
 
@@ -596,10 +607,70 @@ class OrderSequenceGame : Game{
         board.removeOldFeet()
     }
 
-    override fun newGame(){
+    private fun indicateRow(){
+        val row = getOrderRow()
+        Log.i("row ind",row.toString())
+        when (row) {
+            1 -> {
+                val indicator: View = activity.findViewById(R.id.testIndicator0)
+                setIndicator(indicator)
+            }
+            2 -> {
+                val indicator: View = activity.findViewById(R.id.testIndicator1)
+                setIndicator(indicator)
+            }
+            3 -> {
+                val indicator: View = activity.findViewById(R.id.testIndicator2)
+                setIndicator(indicator)
+            }
+            4 -> {
+                val indicator: View = activity.findViewById(R.id.testIndicator3)
+                setIndicator(indicator)
+            }
+            5 -> {
+                val indicator: View = activity.findViewById(R.id.testIndicator4)
+                setIndicator(indicator)
+            }
+            6 -> {
+                val indicator: View = activity.findViewById(R.id.testIndicator5)
+                setIndicator(indicator)
+            }
+        }
+        clearIndicatorRowsApartFrom(row)
+
+
+    }
+
+    private fun setIndicator(ind: View){
+        ind.background = ResourcesCompat.getDrawable(context.resources, R.drawable.row_indicator, null)
+    }
+
+    private fun clearIndicatorRowsApartFrom(row: Int){
+        if (row != 1){
+            activity.findViewById<View>(R.id.testIndicator0).background = null
+        }
+
+        if (row != 2) {
+            activity.findViewById<View>(R.id.testIndicator1).background = null
+        }
+
+        if (row != 3) {
+            activity.findViewById<View>(R.id.testIndicator2).background = null
+        }
+        if (row != 4) {
+            activity.findViewById<View>(R.id.testIndicator3).background = null
+        }
+        if (row != 5) {
+            activity.findViewById<View>(R.id.testIndicator4).background = null
+        }
+        if (row != 6) {
+            activity.findViewById<View>(R.id.testIndicator5).background = null
+        }
+    }
+
+    private fun newGame(){
         clearJobs()
         clearTimer()
-
         board.leftFoot = -1
         board.rightFoot = -1
         board.removeOldFeet()
@@ -611,18 +682,46 @@ class OrderSequenceGame : Game{
         lastFootLeft = false
         gamePlayed = false
         gameOn = false
-
-
-
+        gamePaused = false
         Moves.clear()
         if (showStepsToggle(true)) {
             showStepsToggle()
         }
         clearPrintDebug()
-        showNextStepOnUI(wholeStepSequence, Moves.size,board.Cells);
+
     }
 
-    fun clearJobs(){
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun stopGame(){
+        clearJobs()
+        stopTimer()
+        gamePaused = true
+        changeNewGameButton()
+        clearIndicatorRowsApartFrom(-1)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun startGame() {
+        gameOn = true
+        startTimer()
+        showNextStepOnUI(wholeStepSequence, Moves.size,board.Cells);
+        changeNewGameButton()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun handleStartGameButton() {
+        if (!gameOn){
+            newGame()
+            startGame()
+        } else if (gameOn && gamePaused){
+            gameEnd()
+            newGame()
+        } else if (gameOn && !gamePaused){
+            stopGame()
+        }
+    }
+
+    private fun clearJobs(){
         timerJob?.cancel()
         if (mediaPlayerJobQueue != null){
             for (job in mediaPlayerJobQueue){
@@ -637,14 +736,23 @@ class OrderSequenceGame : Game{
 
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun checkGameState(){
+    private fun checkGameState(): String{
+      //  changeNewGameButton()
         if (!gameOn && !gamePlayed) {
-            startTimer()
-            gameOn = true
-        } else if (gameOn) {
-            if (hasGameEnded()) gameEnd()
+            return "preGame"
+           // changeNewGameButton()
+        } else if (gameOn && !gamePaused) {
+            if (hasGameEnded()) {
+                gameEnd()
+                return "end"
+            }
+            return "game on"
+        } else if (gameOn && gamePaused){
+            // gameEnd()
+            return "user ended"
         }
 
+        return "preGame"
     }
 
     private fun hasGameEnded(): Boolean{
@@ -655,30 +763,58 @@ class OrderSequenceGame : Game{
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun gameEnd(){
+    override fun gameEnd(){
         gameOn = false
         stopTimer()
         clearJobs()
         gamePlayed = true
+        changeNewGameButton()
         clearNextStepOnUI()
     }
 
+    fun changeNewGameButton(){
+        val btn: Button = activity.findViewById(R.id.start_new_game)
+        if (btn!=null){
+            if (!gameOn){
+                btn.text = activity.resources.getText(R.string.start_new_game)
+            } else if (gameOn && gamePaused){
+                btn.text = activity.resources.getText(R.string.startGameButton)
+            } else if (gameOn && !gamePaused){
+                btn.text = activity.resources.getText(R.string.end_game)
+            }
+        }
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
-    override  fun  clickReceiver(cell: MemoryCell2){
+    override fun clickReceiver(cell: MemoryCell2){
 
         if (showStepsToggle(true)) {
             showStepsToggle()
         } else {
-            checkGameState()
-            Moves.add(cell.index)
-            compareStepThirdIteration(cell)
-            showNextStepOnUI(wholeStepSequence, Moves.size,board.Cells);
+            var gamestate = checkGameState()
+            Log.i("Status","gameOn: "+gameOn+ " gamePaused: "+gamePaused+ " gamePlayed: "+gamePlayed +" gamestate: "+gamestate)
+            if (gamestate == "end"){
+                Moves.add(cell.index)
+                compareStepThirdIteration(cell)
+                showNextStepOnUI(wholeStepSequence, Moves.size,board.Cells);
+            } else if (gamestate == "game on"){
+                Moves.add(cell.index)
+                compareStepThirdIteration(cell)
+                showNextStepOnUI(wholeStepSequence, Moves.size,board.Cells);
+            } else if (gamestate == "user ended" || gamestate == "preGame"){
+                cell.flashBGColor(cell.highlightBgColor)
+            }
+
         }
+        printDebug("orderrow",getOrderRow())
+        /*
         printDebug("row",6-cell.row)
         printDebug("column",cell.column+1)
         printDebug("letter",cell.letter)
         printDebug("color",cell.color)
         printDebug("number",cell.index)
+
+         */
 
 
     }

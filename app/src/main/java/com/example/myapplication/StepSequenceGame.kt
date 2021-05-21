@@ -45,7 +45,7 @@ class StepSequenceGame : Game{
 
     private var indexOfLastClue = -1
 
-    private var gameOn: Boolean = false
+
 
     var stepSequenceUp = ArrayList<Int>()
     var stepSequenceDown = ArrayList<Int>()
@@ -130,6 +130,14 @@ class StepSequenceGame : Game{
                 Log.e("TTS", "Initialization Failed " + i.toString())
             }
         })
+    }
+
+    fun handleStartButton(){
+        if (gameOn){
+
+        } else {
+          //   val startbtn
+        }
     }
 
     fun initializeSoundsAndPlayer(){
@@ -934,7 +942,7 @@ class StepSequenceGame : Game{
 
     }
 
-    public override fun newGame(){
+    fun newGame(){
         board.leftFoot = -1
         board.rightFoot = -1
         board.removeOldFeet()
@@ -953,6 +961,22 @@ class StepSequenceGame : Game{
             showStepsToggle()
         }
         clearPrintDebug()
+    }
+
+    fun stopGame() {
+        TODO("Not yet implemented")
+    }
+
+    fun startGame() {
+        TODO("Not yet implemented")
+    }
+
+    override fun handleStartGameButton() {
+        TODO("Not yet implemented")
+    }
+
+    override fun gameEnd() {
+        TODO("Not yet implemented")
     }
 
     override fun showStepsToggle(query: Boolean): Boolean {

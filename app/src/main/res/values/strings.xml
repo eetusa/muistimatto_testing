@@ -1,11 +1,12 @@
 <resources>
     <string name="app_name">Muistimatto</string>
     <string name="ongoingScore">0</string>
-    <string name="startGameButton">Aloita Peli</string>
+    <string name="startGameButton">Uusi peli</string>
     <string name="gameActivityName">Game</string>
     <string name="appTitle"></string>
     <string name="chooseGameModeTitle">Valitse pelimuoto</string>
-    <string name="start_new_game">Uusi peli</string>
+    <string name="start_new_game">Aloita peli</string>
+    <string name="end_game">Lopeta peli</string>
     <string name="show_step_sequence">Näytä askelsarja</string>
     <string name="show_step_sequence_active">Lopeta</string>
     <string name="seq_a">1,3,2,4,5,7,6,8,9,11,10,12,13,15,14,16,17,19,18,20,21,23,22,24,17,19,18,20,13,15,14,16,9,11,10,12,5,7,6,8,1,3,2,4,LRLRLRLRLRLRLRLRLRLRLRLRLRLRLRLRLRLRLRLRLRLR,</string>

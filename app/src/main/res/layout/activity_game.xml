@@ -98,62 +98,6 @@
         app:layout_constraintHorizontal_weight="1"
         >
 
-        <LinearLayout
-            android:id="@+id/row0"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:orientation="vertical"
-            android:layout_weight="1"
-            android:background="@color/game_default_bg"
-            >
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/row1"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:orientation="vertical"
-            android:layout_weight="1"
-            android:background="@color/game_default_bg"
-            >
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/row2"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:orientation="vertical"
-            android:layout_weight="1"
-            android:background="@color/game_default_bg"
-            >
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/row3"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:orientation="vertical"
-            android:layout_weight="1"
-            android:background="@color/game_default_bg"
-            >
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/row4"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:orientation="vertical"
-            android:layout_weight="1"
-            android:background="@color/game_default_bg"
-            >
-
-        </LinearLayout>
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/row5"
             android:layout_width="match_parent"
@@ -162,9 +106,125 @@
             android:layout_weight="1"
             android:padding="3dp"
             >
+            <View
+                android:id="@+id/testIndicator5"
+                android:background="@color/game_default_bg"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/row4"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:padding="3dp"
+            >
+            <View
+                android:id="@+id/testIndicator4"
+                android:background="@color/game_default_bg"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/row3"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:padding="3dp"
+            >
+            <View
+                android:id="@+id/testIndicator3"
+                android:background="@color/game_default_bg"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/row2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:padding="3dp"
+            >
+            <View
+                android:id="@+id/testIndicator2"
+                android:background="@color/game_default_bg"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/row1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:padding="3dp"
+            >
+            <View
+                android:id="@+id/testIndicator1"
+                android:background="@color/game_default_bg"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/row0"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:padding="3dp"
+            >
 
             <View
-                android:id="@+id/testIndicator"
+                android:id="@+id/testIndicator0"
                 android:background="@color/game_default_bg"
                 android:layout_width="0dp"
                 android:layout_height="0dp"

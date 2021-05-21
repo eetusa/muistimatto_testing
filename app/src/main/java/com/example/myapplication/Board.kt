@@ -143,17 +143,6 @@ class Board : LinearLayout {
     }
 
 
-      /*
-            var wat = CoroutineScope(Dispatchers.IO).launch {
-                delay(TimeUnit.SECONDS.toMillis(3))
-                withContext(Dispatchers.Main) {
-                    Log.i("TAG", "this will be called after 3 seconds")
-                    finish()
-                }
-            }
-
-*/
-
 
     private fun initBoard(context: Context){
         for (i in 0 until rows){

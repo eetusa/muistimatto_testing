@@ -4,7 +4,9 @@ import android.app.Activity
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.widget.Button
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 
 class GameHandler {
     private var context: Context
@@ -18,11 +20,12 @@ class GameHandler {
         this.context = context
         this.activity = activity
         settings = savedInstanceState;
-        startGame()
+        initializeGame()
+       // startGame()
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    open fun startGame(){
+    private fun initializeGame(){
         val mode: Int = settings.getInt("gamemode")
         if (gameRunner == null){
             when (mode) {
@@ -30,14 +33,20 @@ class GameHandler {
                 1 -> { gameRunner = OrderSequenceGame(context, activity, settings)}
             }
 
-        } else {
-            gameRunner!!.newGame()
         }
-
     }
+
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    open fun startGame(){
+        gameRunner!!.handleStartGameButton()
+    }
+
+
     fun showSteps(){
-        if (gameRunner != null){
             gameRunner!!.showStepsToggle()
-        }
+    }
+
+    fun shutDownGame(){
+        gameRunner!!.gameEnd()
     }
 }
