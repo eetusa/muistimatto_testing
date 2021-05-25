@@ -16,7 +16,8 @@ class GameActivity : AppCompatActivity() {
     var tts: TextToSpeech? = null
     var game: GameHandler? = null
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -34,7 +35,7 @@ class GameActivity : AppCompatActivity() {
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun startGame(savedInstanceState: Bundle){
         //val board: Board = createBoard()
         game = GameHandler(this, this, savedInstanceState)

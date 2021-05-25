@@ -38,26 +38,17 @@ import kotlin.random.Random
 
 class OrderSequenceGame : Game{
 
-    private var board: Board;
-    var context: Context
-    private var activity: Activity
-    private var settings: Bundle;
+
     private var debugLayout: LinearLayout;
     private var debugTextView: TextView;
 
     private var gameDifficulty = 2
-
-    private var indexOfLastClue = -1
-
-    var wholeStepSequence = ArrayList<Int>()
-    var wholeStepFooting: String = ""
 
     var currentSequenceRow: Int = -1
 
     var lastFootLeft: Boolean = false
 
     var showingStepSequence: Job? = null
-    var timerJob: Job? = null
 
     var stepCycleIndex: Int = 1
     var currentCycleRow = 1;
@@ -72,17 +63,8 @@ class OrderSequenceGame : Game{
     private var textcolor_nonselected: Int = 0
     private var textcolor_selected: Int = 0
 
-    private var orderRow = 1
-    private var Moves = ArrayList<Int>()
-    private var Points = 0
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private var startTime = Instant.now()
-
-
-
-
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     constructor(context: Context, activity: Activity, savedInstanceState: Bundle){
         this.context = context
         this.activity = activity
@@ -91,7 +73,7 @@ class OrderSequenceGame : Game{
 
         this.debugLayout = activity.findViewById(R.id.rightLayout)
         this.debugTextView = TextView(context)
-        this.debugTextView.text = "0"
+       // this.debugTextView.text = "0"
         this.debugLayout.addView(debugTextView)
 
         textcolor_nonselected = ContextCompat.getColor(context, R.color.text_default_color)
@@ -163,9 +145,6 @@ class OrderSequenceGame : Game{
             e.message?.let { Log.e("Sounds", it) }
         }
 
-
-        //playSound(elementSoundsArray[0],0)
-
     }
 
     private fun playSound(soundArray: ArrayList<AssetFileDescriptor>, index: Int){
@@ -188,13 +167,9 @@ class OrderSequenceGame : Game{
                     var sound = soundArray[index]
 
                     if (sound != null) {
-                        //if (playerx.isPlaying == true) playerx.stop()
-
-                        //  playerx.reset()
                         playerx.setDataSource(sound.fileDescriptor, sound.startOffset, sound.length)
                         playerx.prepare()
                         playerx.start()
-                        // Log.i("sound duration", player?.duration.toString())
                     }
                 }
             }
@@ -255,11 +230,8 @@ class OrderSequenceGame : Game{
         clearTimer()
         clearNextStepOnUI()
 
-        // getAndShowRightFootOnUi(wholeStepFooting, 0)
-       // generateStepSymbols(gameSymbolAmount,gameDifficulty)
-        // setStepSymbolsOnUI(stepSymbols, 0)
         createRandomStepSequence()
-       // showNextStepOnUI(wholeStepSequence, Moves.size,board.Cells);
+        newGame()
     }
 
     private fun createRandomStepSequence(){
@@ -313,12 +285,6 @@ class OrderSequenceGame : Game{
         debugTextView.append(str.toString() + "\n")
     }
 
-    private fun <T> printDebug(list: ArrayList<T> ){
-        for (item in list){
-            debugTextView.append(item.toString() + " ")
-        }
-        debugTextView.append("\n")
-    }
     private fun <T> printDebug(tag: String, list: ArrayList<T> ){
         debugTextView.append("\n'$tag':\n")
         for (item in list){
@@ -379,14 +345,9 @@ class OrderSequenceGame : Game{
 
     }
 
-    private fun getOrderRow(): Int{
-        if (Moves.size < wholeStepSequence.size){
-            return (wholeStepSequence[Moves.size]-1)/board.columns+1
-        }
 
-        return -1
-    }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun compareStepThirdIteration(cell: MemoryCell2){
         clearPrintDebug()
         // printDebug(Moves.size.toString() + " " +wholeStepSequence.size.toString())
@@ -404,8 +365,8 @@ class OrderSequenceGame : Game{
             cell.flashBGColor(cell.highlightBgColor)
             setFoot(cell)
         }
-        printDebug("Points: $Points / ${wholeStepSequence.size}")
-        printDebug("Steps",wholeStepSequence)
+      //  printDebug("Points: $Points / ${wholeStepSequence.size}")
+      //  printDebug("Steps",wholeStepSequence)
     }
 
 
@@ -428,7 +389,6 @@ class OrderSequenceGame : Game{
                 player?.stop()
                 player?.reset()
                 player?.release()
-                
             }
         }
         mediaPlayerQueue.clear()
@@ -442,14 +402,15 @@ class OrderSequenceGame : Game{
         val orderRowNumbers: Array<String> = arrayOf("ensimmäisen","toisen","kolmannen","neljännen","viidennen","kuudennen")
         val orderColumnNumbers: Array<String> = arrayOf("ensimmäinen","toinen","kolmas","neljäs")
         val columnAndRow: String = orderRowNumbers[5-cell.row] + " rivin " + orderColumnNumbers[cell.column] + " ruutu"
-        val toistaIndex = 10
+       // val columnAndRow: String = orderColumnNumbers[cell.column] + " ruutu"
+
 
         clueArray.add(cell.color)
         clueArray.add(cell.letter)
         clueArray.add(cell.index.toString())
         clueArray.add(cell.symbol)
-
         clueArray.add(columnAndRow)
+
         var random = -2
         while(true){
             random = Random.nextInt(clueArray.size)
@@ -506,8 +467,6 @@ class OrderSequenceGame : Game{
         } else if (type == 4){
             var temporaryArray = ArrayList<AssetFileDescriptor>()
             try{
-              //  temporaryArray.add(orderSoundsArray[0][5-cell.row])
-              //  temporaryArray.add(orderSoundsArray[2][0])
                 temporaryArray.add(orderSoundsArray[1][cell.column])
                 temporaryArray.add(orderSoundsArray[3][0])
                 playSoundsInSequence(temporaryArray,0)
@@ -519,7 +478,6 @@ class OrderSequenceGame : Game{
 
     private fun showNextStepOnUI(arrayList: ArrayList<Int>, index: Int, cells: ArrayList<MemoryCell2>){
         val footview: TextView = activity.findViewById(R.id.whichSymbolsTextView)
-        //   Log.i("LOL",""+cells[arrayList[index]-1].index)
         indicateRow()
         if (index < arrayList.size){
             footview.text = giveClueFromCell(gameDifficulty,cells[arrayList[index]-1]);
@@ -529,69 +487,24 @@ class OrderSequenceGame : Game{
     private fun clearNextStepOnUI(){
         val footview: TextView = activity.findViewById(R.id.whichSymbolsTextView)
         footview.text = ""
+        clearIndicatorRowsApartFrom(-1)
     }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun startTimer(){
-        startTime = Instant.now()
-        writeToMidTopLeft("0.00")
-        timerJob = viewModelScope.launch {
-
-            while(true){
-                delay(10L)
-                writeToMidTopLeft(getTimeFromStart())
-            }
-
-        }
-
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun getTimeFromStart(): String{
-        var timedif: Long = (Instant.now().toEpochMilli() - startTime.toEpochMilli())/1000L
-        var td = (Instant.now().toEpochMilli() - startTime.toEpochMilli()).toString()
-        if (td.length>2){
-            var latter = td.takeLast(3)
-            var pre = td.dropLast(3)
-            return pre+"."+latter.substring(0,2)
-        }
-
-        return timedif.toString()
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun stopTimer(){
-        timerJob?.cancel()
-        writeToMidTopLeft(getTimeFromStart())
-    }
-    private fun clearTimer(){
-        timerJob?.cancel()
-        writeToMidTopLeft("0.00")
-    }
-
-    private fun writeToMidTopLeft(time: String){
-        val footview: TextView = activity.findViewById(R.id.whichFootTextView)
-
-        footview.text = time
-
-    }
-
-
     private fun correctCellClicked(cell: MemoryCell2){
         cell.flashCorrect()
-        Points++
         setFoot(cell)
+        correctMoveLogic()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun incorrectCellClicked(cell: MemoryCell2){
-        //val convertedStep = wholeStepSequenceInRows[currentSequenceRow][stepsInCurrentCycle.size-1]
-
         val correctIndex = wholeStepSequence[Moves.size-1]
-        //printDebug(correctIndex)
-        //printDebug(board.Cells[correctIndex-1].index)
         board.Cells[correctIndex-1].flashCorrect()
         cell.flashMistake()
         setFoot(cell)
+        incorrectMoveLogic()
     }
 
     private fun setFoot(cell: MemoryCell2){
@@ -605,67 +518,6 @@ class OrderSequenceGame : Game{
             board.leftFoot = cell.index
         }
         board.removeOldFeet()
-    }
-
-    private fun indicateRow(){
-        val row = getOrderRow()
-        Log.i("row ind",row.toString())
-        when (row) {
-            1 -> {
-                val indicator: View = activity.findViewById(R.id.testIndicator0)
-                setIndicator(indicator)
-            }
-            2 -> {
-                val indicator: View = activity.findViewById(R.id.testIndicator1)
-                setIndicator(indicator)
-            }
-            3 -> {
-                val indicator: View = activity.findViewById(R.id.testIndicator2)
-                setIndicator(indicator)
-            }
-            4 -> {
-                val indicator: View = activity.findViewById(R.id.testIndicator3)
-                setIndicator(indicator)
-            }
-            5 -> {
-                val indicator: View = activity.findViewById(R.id.testIndicator4)
-                setIndicator(indicator)
-            }
-            6 -> {
-                val indicator: View = activity.findViewById(R.id.testIndicator5)
-                setIndicator(indicator)
-            }
-        }
-        clearIndicatorRowsApartFrom(row)
-
-
-    }
-
-    private fun setIndicator(ind: View){
-        ind.background = ResourcesCompat.getDrawable(context.resources, R.drawable.row_indicator, null)
-    }
-
-    private fun clearIndicatorRowsApartFrom(row: Int){
-        if (row != 1){
-            activity.findViewById<View>(R.id.testIndicator0).background = null
-        }
-
-        if (row != 2) {
-            activity.findViewById<View>(R.id.testIndicator1).background = null
-        }
-
-        if (row != 3) {
-            activity.findViewById<View>(R.id.testIndicator2).background = null
-        }
-        if (row != 4) {
-            activity.findViewById<View>(R.id.testIndicator3).background = null
-        }
-        if (row != 5) {
-            activity.findViewById<View>(R.id.testIndicator4).background = null
-        }
-        if (row != 6) {
-            activity.findViewById<View>(R.id.testIndicator5).background = null
-        }
     }
 
     private fun newGame(){
@@ -756,7 +608,7 @@ class OrderSequenceGame : Game{
     }
 
     private fun hasGameEnded(): Boolean{
-        if (Moves.size >= wholeStepSequence.size-1){
+        if (Moves.size >= wholeStepSequence.size){
             return true
         }
         return false
@@ -764,26 +616,17 @@ class OrderSequenceGame : Game{
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun gameEnd(){
+        gameFinished()
         gameOn = false
-        stopTimer()
+        gamePaused = false
+     //   stopTimer()
         clearJobs()
         gamePlayed = true
         changeNewGameButton()
         clearNextStepOnUI()
     }
 
-    fun changeNewGameButton(){
-        val btn: Button = activity.findViewById(R.id.start_new_game)
-        if (btn!=null){
-            if (!gameOn){
-                btn.text = activity.resources.getText(R.string.start_new_game)
-            } else if (gameOn && gamePaused){
-                btn.text = activity.resources.getText(R.string.startGameButton)
-            } else if (gameOn && !gamePaused){
-                btn.text = activity.resources.getText(R.string.end_game)
-            }
-        }
-    }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun clickReceiver(cell: MemoryCell2){
@@ -801,12 +644,13 @@ class OrderSequenceGame : Game{
                 Moves.add(cell.index)
                 compareStepThirdIteration(cell)
                 showNextStepOnUI(wholeStepSequence, Moves.size,board.Cells);
+                if (hasGameEnded()) gameEnd()
             } else if (gamestate == "user ended" || gamestate == "preGame"){
                 cell.flashBGColor(cell.highlightBgColor)
             }
 
         }
-        printDebug("orderrow",getOrderRow())
+       // printDebug("orderrow",getOrderRow())
         /*
         printDebug("row",6-cell.row)
         printDebug("column",cell.column+1)

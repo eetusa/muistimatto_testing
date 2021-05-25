@@ -37,14 +37,6 @@
 
             android:text="@string/show_step_sequence" />
 
-        <Button
-            android:id="@+id/button6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Button"
-
-            android:layout_margin="10dp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -65,21 +57,115 @@
         ></LinearLayout>
 
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/leftLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/game_default_bg"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/bottomLayout"
+
         app:layout_constraintEnd_toStartOf="@+id/gameMarkersLeft"
+        app:layout_constraintHorizontal_weight="4"
 
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topLayout"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_weight="8">
 
-        app:layout_constraintVertical_weight="8"
-        app:layout_constraintHorizontal_weight="4"
-        ></LinearLayout>
+
+        <TextView
+            android:id="@+id/pointsLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/points_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:textSize="20dp"
+            />
+
+        <TextView
+            android:id="@+id/pointsAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="0"
+            app:layout_constraintTop_toBottomOf="@+id/pointsLabel"
+            app:layout_constraintBottom_toTopOf="@id/bestStreakLabel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteX="-1dp"
+            android:textSize="20dp"/>
+
+        <TextView
+            android:id="@+id/bestStreakLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/best_streak_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pointsAmount"
+            android:paddingTop="10dp"
+            android:textSize="20dp"/>
+
+        <TextView
+            android:id="@+id/bestStreakAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bestStreakLabel"
+            android:textSize="20dp"/>
+
+        <TextView
+            android:id="@+id/streakLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/streak_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bestStreakAmount"
+            android:paddingTop="10dp"
+            android:textSize="20dp"/>
+
+        <TextView
+            android:id="@+id/streakAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/streakLabel"
+            android:textSize="20dp"/>
+
+        <TextView
+            android:id="@+id/bestTimeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/best_time_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/streakAmount"
+            android:textSize="20dp"
+            android:paddingTop="10dp"/>
+
+        <TextView
+            android:id="@+id/bestTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00:00"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bestTimeLabel"
+            android:textSize="20dp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:id="@+id/gameMarkersLeft"
@@ -285,7 +371,7 @@
 
             </LinearLayout>
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1">
@@ -301,16 +387,31 @@
                     android:paddingTop="0dp"
                     android:paddingRight="10dp"
                     android:text="L"
-                    android:textSize="32sp"
                     android:textColor="#000000"
-                    /><![CDATA[
+                    android:textSize="32sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/whichSymbolsTextView"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHorizontal_chainStyle="spread_inside"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" /><![CDATA[
 
 
 
             android:text="TextView" />
 
 
-        ]]>
+
+
+
+
+
+
+
+
+
+
+                ]]>
 
                 <TextView
                     android:id="@+id/whichSymbolsTextView"
@@ -322,10 +423,25 @@
                     android:paddingRight="10dp"
                     android:paddingBottom="0dp"
                     android:text="väri numero kirjain"
-                    android:textSize="26sp"
                     android:textColor="@color/text_default_color"
-                    />
-            </LinearLayout><![CDATA[
+                    android:textSize="26sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/timerTextView"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/whichFootTextView"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/timerTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TextView"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/whichSymbolsTextView"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout><![CDATA[
 
 
 

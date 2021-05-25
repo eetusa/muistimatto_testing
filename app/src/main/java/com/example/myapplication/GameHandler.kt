@@ -15,7 +15,8 @@ class GameHandler {
     private var gameRunner: Game? = null;
 
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+
+    @RequiresApi(Build.VERSION_CODES.O)
     constructor(context: Context, activity: Activity, savedInstanceState: Bundle){
         this.context = context
         this.activity = activity
@@ -24,7 +25,8 @@ class GameHandler {
        // startGame()
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun initializeGame(){
         val mode: Int = settings.getInt("gamemode")
         if (gameRunner == null){

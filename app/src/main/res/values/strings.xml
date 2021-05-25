@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">Muistimatto</string>
+    <string name="points_label">Pisteet:</string>
+    <string name="best_time_label">Paras aika:</string>
+    <string name="streak_label">Putki:</string>
+    <string name="best_streak_label">Paras putki:</string>
     <string name="ongoingScore">0</string>
     <string name="startGameButton">Uusi peli</string>
     <string name="gameActivityName">Game</string>
