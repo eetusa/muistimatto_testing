@@ -111,6 +111,8 @@ class StepSequenceGame : Game{
     private fun getStepSequenceWhole(){
         val steps = activity.resources.getString(R.string.seq_b)
         var value = ""
+        setExtraGameData("","Askelsarja 2")
+        Log.i("juu","täällä")
         for (i in steps){
             if (i==','){
 
@@ -385,7 +387,7 @@ class StepSequenceGame : Game{
             showStepsToggle()
         }
         clearPrintDebug()
-        resetStreak()
+       // resetStreak()
         updatePointsAndStreaks()
     }
 
@@ -412,8 +414,10 @@ class StepSequenceGame : Game{
         } else if (gameOn && gamePaused){
             gameEnd()
             newGame()
+            resetStreak()
         } else if (gameOn && !gamePaused){
             stopGame()
+            resetStreak()
         }
     }
 

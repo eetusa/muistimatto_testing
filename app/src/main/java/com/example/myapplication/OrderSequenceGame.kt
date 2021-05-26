@@ -520,6 +520,7 @@ class OrderSequenceGame : Game{
         board.removeOldFeet()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun newGame(){
         clearJobs()
         clearTimer()
@@ -540,6 +541,7 @@ class OrderSequenceGame : Game{
             showStepsToggle()
         }
         clearPrintDebug()
+        updatePointsAndStreaks()
 
     }
 
@@ -568,8 +570,10 @@ class OrderSequenceGame : Game{
         } else if (gameOn && gamePaused){
             gameEnd()
             newGame()
+            resetStreak()
         } else if (gameOn && !gamePaused){
             stopGame()
+            resetStreak()
         }
     }
 

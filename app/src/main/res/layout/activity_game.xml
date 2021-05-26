@@ -165,6 +165,31 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/bestTimeLabel"
             android:textSize="20dp"/>
+
+        <TextView
+            android:id="@+id/extraGameDataValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text=""
+            android:textSize="20dp"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/extraGameDataLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text=""
+            android:textSize="20dp"
+            android:gravity="center"
+            app:layout_constraintBottom_toTopOf="@+id/extraGameDataValue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
@@ -351,8 +376,7 @@
             <TextView
                 android:id="@+id/scoreCounter"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/ongoingScore" />
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
         <LinearLayout
@@ -435,7 +459,7 @@
                     android:id="@+id/timerTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TextView"
+                    android:text="0.00"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"

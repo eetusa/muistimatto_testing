@@ -16,7 +16,6 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import java.time.Instant
 
 abstract class Game : ViewModel() {
@@ -52,6 +51,8 @@ abstract class Game : ViewModel() {
      var streakView: TextView? = null
      var bestStreakView: TextView? = null
      var bestTimeView: TextView? = null
+     var extraGameDataLabel: TextView? = null
+     var extraGameDataValue: TextView? = null
 
      abstract fun clickReceiver(cell: MemoryCell2)
      abstract fun handleStartGameButton()
@@ -227,10 +228,20 @@ abstract class Game : ViewModel() {
           if (bestStreakView == null)bestStreakView = activity.findViewById(R.id.bestStreakAmount)
           if (bestTimeView == null)bestTimeView = activity.findViewById(R.id.bestTime)
 
+
           pointView?.text = Points.toString()
           streakView?.text = Streak.toString()
           bestStreakView?.text = BestStreak.toString()
           bestTimeView?.text = millisecondsReFormat(BestTime)
+
+     }
+
+     fun setExtraGameData(label: String, value: String){
+          if (extraGameDataLabel == null)extraGameDataLabel = activity.findViewById(R.id.extraGameDataLabel)
+          if (extraGameDataValue == null)extraGameDataValue = activity.findViewById(R.id.extraGameDataValue)
+          extraGameDataLabel?.text = label+":";
+          extraGameDataValue?.text = value;
+
 
      }
 }
