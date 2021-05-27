@@ -33,6 +33,7 @@ class GameHandler {
             when (mode) {
                 0 -> { gameRunner = StepSequenceGame(context, activity, settings) }
                 1 -> { gameRunner = OrderSequenceGame(context, activity, settings)}
+                2 -> { gameRunner = CountingGame(context, activity, settings)}
             }
 
         }

@@ -36,7 +36,7 @@ import kotlin.collections.ArrayList
 import kotlin.random.Random
 
 
-class OrderSequenceGame : Game{
+open class OrderSequenceGame : Game{
 
 
     private var debugLayout: LinearLayout;
@@ -60,8 +60,8 @@ class OrderSequenceGame : Game{
     var mediaPlayerQueue = ArrayList<MediaPlayer>()
     var mediaPlayerJobQueue = ArrayList<Job>()
 
-    private var textcolor_nonselected: Int = 0
-    private var textcolor_selected: Int = 0
+    var textcolor_nonselected: Int = 0
+    var textcolor_selected: Int = 0
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -84,7 +84,7 @@ class OrderSequenceGame : Game{
 
     }
 
-    private fun initializeSounds(){
+    fun initializeSounds(){
 
 
         if (elementSoundsArray!=null)elementSoundsArray.clear()
@@ -222,7 +222,8 @@ class OrderSequenceGame : Game{
         return mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
     }
 
-    private fun initializeGame() {
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun initializeGame() {
         val mode: Int = settings.getInt("gamemode")
         val testLayout: LinearLayout = activity.findViewById(R.id.testLayout)
 
@@ -266,7 +267,7 @@ class OrderSequenceGame : Game{
             rowsteps.clear()
         }
 
-        printDebug("rowsteps",randomSteps)
+     //   printDebug("rowsteps",randomSteps)
 
         if (wholeStepSequence.size>0)wholeStepSequence.clear()
         wholeStepSequence.apply {  addAll(randomSteps) }
@@ -395,7 +396,7 @@ class OrderSequenceGame : Game{
 
     }
 
-    private fun giveClueFromCell(dif: Int, cell: MemoryCell2): String{
+    open fun giveClueFromCell(dif: Int, cell: MemoryCell2): String{
         stopMediaPlayers()
         Log.i("Calling clue","calling")
         val clueArray = ArrayList<String>()
@@ -628,6 +629,7 @@ class OrderSequenceGame : Game{
         gamePlayed = true
         changeNewGameButton()
         clearNextStepOnUI()
+        createRandomStepSequence()
     }
 
 
