@@ -7,7 +7,9 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.View.GONE
 import android.widget.Button
+import android.widget.Spinner
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
@@ -45,7 +47,9 @@ abstract class Game : ViewModel() {
      var Points = 0
      var Streak = 0
      var BestStreak = 0
-     var BestTime: Long = 0
+     var BestTime = ArrayList<Long>()
+
+     var chosenSubGame = 0
 
      var pointView: TextView? = null
      var streakView: TextView? = null
@@ -126,6 +130,14 @@ abstract class Game : ViewModel() {
           }
 
           return timedif.toString()
+     }
+
+     fun hideShowStepSequenceButton(){
+          val btn = activity.findViewById<Button>(R.id.show_step_sequence)
+          if (btn != null) btn.visibility = GONE
+
+          val spinner = activity.findViewById<Spinner>(R.id.chooseStepSequence)
+          if (spinner != null) spinner.visibility = GONE
      }
 
      fun writeToMidTopLeft(time: String){
@@ -239,7 +251,7 @@ abstract class Game : ViewModel() {
      fun setExtraGameData(label: String, value: String){
           if (extraGameDataLabel == null)extraGameDataLabel = activity.findViewById(R.id.extraGameDataLabel)
           if (extraGameDataValue == null)extraGameDataValue = activity.findViewById(R.id.extraGameDataValue)
-          extraGameDataLabel?.text = label+":";
+          extraGameDataLabel?.text = label;
           extraGameDataValue?.text = value;
 
 

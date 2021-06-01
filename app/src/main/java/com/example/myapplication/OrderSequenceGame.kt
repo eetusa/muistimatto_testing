@@ -81,6 +81,7 @@ open class OrderSequenceGame : Game{
 
         initializeSounds()
         initializeGame()
+        hideShowStepSequenceButton()
 
     }
 
@@ -353,10 +354,6 @@ open class OrderSequenceGame : Game{
         clearPrintDebug()
         // printDebug(Moves.size.toString() + " " +wholeStepSequence.size.toString())
         if (Moves.size < wholeStepSequence.size+1){
-            if (Moves.size < wholeStepSequence.size){
-                // getAndShowRightFootOnUi(wholeStepFooting, Moves.size)
-                // setStepSymbolsOnUI(stepSymbols,((Moves.size)%stepSymbols.size))
-            }
             if (Moves[Moves.size-1] == wholeStepSequence[Moves.size-1]){
                 correctCellClicked(cell)
             } else {
@@ -509,6 +506,7 @@ open class OrderSequenceGame : Game{
     }
 
     private fun setFoot(cell: MemoryCell2){
+        /*
         if (lastFootLeft){
             lastFootLeft = false
             cell.setRightFoot()
@@ -517,6 +515,15 @@ open class OrderSequenceGame : Game{
             lastFootLeft = true
             cell.setLeftFoot()
             board.leftFoot = cell.index
+        }
+
+         */
+        if (cell.column < 2){
+            cell.setLeftFoot()
+            board.leftFoot = cell.index
+        } else {
+            cell.setRightFoot()
+            board.rightFoot = cell.index
         }
         board.removeOldFeet()
     }

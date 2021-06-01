@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".GameActivity">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bottomLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -24,20 +24,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:layout_weight="1"
 
-            android:text="@string/start_new_game" />
+            android:text="@string/start_new_game"
+            app:layout_constraintEnd_toStartOf="@+id/show_step_sequence"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
 
         <Button
             android:id="@+id/show_step_sequence"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:layout_weight="1"
 
-            android:text="@string/show_step_sequence" />
 
-    </LinearLayout>
+            android:text="@string/show_step_sequence"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/start_new_game"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:id="@+id/rightLayout"
@@ -80,11 +90,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/points_label"
+            android:textSize="20dp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:textSize="20dp"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/pointsAmount"
@@ -104,12 +114,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:paddingTop="10dp"
             android:text="@string/best_streak_label"
+            android:textSize="20dp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pointsAmount"
-            android:paddingTop="10dp"
-            android:textSize="20dp"/>
+            app:layout_constraintTop_toBottomOf="@+id/pointsAmount" />
 
         <TextView
             android:id="@+id/bestStreakAmount"
@@ -127,12 +138,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:paddingTop="10dp"
             android:text="@string/streak_label"
+            android:textSize="20dp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/bestStreakAmount"
-            android:paddingTop="10dp"
-            android:textSize="20dp"/>
+            app:layout_constraintTop_toBottomOf="@+id/bestStreakAmount" />
 
         <TextView
             android:id="@+id/streakAmount"
@@ -149,12 +161,13 @@
             android:id="@+id/bestTimeLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingTop="10dp"
             android:text="@string/best_time_label"
+            android:textSize="20dp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/streakAmount"
-            android:textSize="20dp"
-            android:paddingTop="10dp"/>
+            app:layout_constraintTop_toBottomOf="@+id/streakAmount" />
 
         <TextView
             android:id="@+id/bestTime"
@@ -171,13 +184,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
+            android:gravity="center"
             android:text=""
             android:textSize="20dp"
-            android:gravity="center"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/chooseStepSequence"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/extraGameDataLabel"
@@ -190,6 +203,18 @@
             app:layout_constraintBottom_toTopOf="@+id/extraGameDataValue"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <Spinner
+            android:id="@+id/chooseStepSequence"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:layout_gravity="start"
+            android:padding="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
@@ -413,28 +438,18 @@
                     android:text="L"
                     android:textColor="#000000"
                     android:textSize="32sp"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/whichSymbolsTextView"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintHorizontal_chainStyle="spread_inside"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" /><![CDATA[
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:visibility="visible" /><![CDATA[
 
 
 
             android:text="TextView" />
-
-
-
-
-
-
-
-
-
-
-
-
                 ]]>
 
                 <TextView
@@ -446,13 +461,14 @@
                     android:paddingTop="0dp"
                     android:paddingRight="10dp"
                     android:paddingBottom="0dp"
-                    android:text="väri numero kirjain"
+                    android:text="numero kirjain"
                     android:textColor="@color/text_default_color"
                     android:textSize="26sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/timerTextView"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/whichFootTextView"
+
+                    app:layout_constraintHorizontal_chainStyle="spread_inside"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
@@ -462,7 +478,7 @@
                     android:text="0.00"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
+
                     app:layout_constraintStart_toEndOf="@+id/whichSymbolsTextView"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout><![CDATA[

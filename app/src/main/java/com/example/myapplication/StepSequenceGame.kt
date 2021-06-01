@@ -10,16 +10,15 @@ import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.util.Log
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.view.View
+import android.widget.*
+import android.widget.AdapterView.OnItemSelectedListener
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.collections.ArrayList
 import kotlin.random.Random
 
 
@@ -75,8 +74,42 @@ class StepSequenceGame : Game{
          getAndShowRightFootOnUi(wholeStepFooting, 0)
          generateStepSymbols(gameSymbolAmount,gameDifficulty)
          setStepSymbolsOnUI(stepSymbols, 0)
+         initializeSpinner()
 
 
+    }
+
+    private fun initializeSpinner(){
+        val spinner: Spinner = activity.findViewById(R.id.chooseStepSequence)
+        ArrayAdapter.createFromResource(
+            context,
+            R.array.stepsequence_names_array,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinner.adapter = adapter
+        }
+
+        spinner.onItemSelectedListener = object : OnItemSelectedListener {
+            override fun onItemSelected(
+                parentView: AdapterView<*>?,
+                selectedItemView: View?,
+                position: Int,
+                id: Long
+            ) {
+                Log.i("position", position.toString())
+                when (position) {
+                    0 -> { getStepSequenceWhole(0) }
+                    1 -> { getStepSequenceWhole(1)}
+                    2 -> { getStepSequenceWhole(2)}
+                    3 -> {getStepSequenceWhole(3)}
+                }
+            }
+
+            override fun onNothingSelected(parentView: AdapterView<*>?) {
+                // your code here
+            }
+        }
     }
 
 
@@ -108,11 +141,24 @@ class StepSequenceGame : Game{
         debugTextView.append("\n")
     }
 
-    private fun getStepSequenceWhole(){
-        val steps = activity.resources.getString(R.string.seq_b)
+    private fun getStepSequenceWhole(seq: Int = 0){
+        var steps = ""
+        when (seq){
+            0 -> {steps = activity.resources.getString(R.string.seq_a)
+                Log.i("juu","a")}
+            1 -> {steps = activity.resources.getString(R.string.seq_b)
+                Log.i("juu","b")}
+            2 -> {steps = activity.resources.getString(R.string.seq_c)
+                Log.i("juu","c")}
+            3 -> {steps = activity.resources.getString(R.string.seq_d)
+                Log.i("juu","d")}
+        }
+       // val steps = activity.resources.getString(R.string.seq_b)
         var value = ""
-        setExtraGameData("","Askelsarja 2")
-        Log.i("juu","täällä")
+        setExtraGameData("","Askelsarja nro")
+        if (wholeStepSequence != null) wholeStepSequence.clear()
+        if (wholeStepFooting != null) wholeStepFooting = ""
+
         for (i in steps){
             if (i==','){
 
@@ -145,10 +191,12 @@ class StepSequenceGame : Game{
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun flashSequence(sequence: ArrayList<Int>, query: Boolean): Boolean{
 
         if (showingStepSequence == null){
             if (!query) {
+                if (gameOn) stopGame()
                 setSequenceButtonTextToActive(true)
 
                 showingStepSequence = viewModelScope.launch {
@@ -409,7 +457,7 @@ class StepSequenceGame : Game{
     @RequiresApi(Build.VERSION_CODES.O)
     override fun handleStartGameButton() {
         if (!gameOn){
-            newGame()
+            //newGame()
             startGame()
         } else if (gameOn && gamePaused){
             gameEnd()
@@ -465,6 +513,7 @@ class StepSequenceGame : Game{
         return false
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun showStepsToggle(query: Boolean): Boolean {
         return flashSequence(wholeStepSequence, query)
     }
