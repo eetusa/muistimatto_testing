@@ -3,17 +3,13 @@ package com.example.myapplication
 import android.app.Activity
 import android.content.Context
 import android.graphics.drawable.Drawable
-import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View.OnTouchListener
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
 
 
 /**
@@ -157,9 +153,39 @@ class Board : LinearLayout {
             for (j in 0 until columns){
                 val cell = MemoryCell2(context, i, j)
                 row.addView(cell)
-                cell.setOnClickListener(){
-                    game.clickReceiver(cell)
-               }
+
+                cell.setOnTouchListener(OnTouchListener { v, event ->
+                    if (event.actionMasked == MotionEvent.ACTION_DOWN) {
+                       // Log.i("touch", cell.index.toString())
+                     //   game.clickReceiver(cell)
+                        game.touchDown(cell)
+                    }
+
+                    if (event.actionMasked == MotionEvent.ACTION_UP) {
+                       // Log.i("touch", cell.index.toString())
+                       // game.clickReceiver(cell)
+                        game.touchUp(cell)
+                    }
+
+                    if (event.actionMasked == MotionEvent.ACTION_MOVE){
+                        if (event.x > cell.width || event.x < 0 || event.y > cell.height || event.y < 0){
+                            game.touchUp(cell)
+                        }
+                    }
+
+
+                   // Log.i("touch", cell.width.toString())
+
+                   // Log.i("action",event.toString())
+                    true
+                })
+
+
+
+
+               // cell.setOnClickListener(){
+                   // game.clickReceiver(cell)
+               //}
                 Cells.add(cell)
             }
 

@@ -47,7 +47,8 @@ abstract class Game : ViewModel() {
      var Points = 0
      var Streak = 0
      var BestStreak = 0
-     var BestTime = ArrayList<Long>()
+   //  var BestTime = ArrayList<Long>()
+     var BestTime: Long = 0
 
      var chosenSubGame = 0
 
@@ -93,6 +94,19 @@ abstract class Game : ViewModel() {
                updatePointsAndStreaks()
           }
      }
+
+    fun touchDown(cell: MemoryCell2){
+        Log.i("touchDown",cell.index.toString() + " has been pressed")
+        cell.isBeingPressed = true
+    }
+
+    fun touchUp(cell: MemoryCell2){
+
+        if (cell.isBeingPressed){
+            Log.i("touchDown",cell.index.toString() + " has been released")
+            cell.isBeingPressed = false
+        }
+    }
 
      fun updateBestTime(time: Long){
           if (time < BestTime || BestTime == 0L){

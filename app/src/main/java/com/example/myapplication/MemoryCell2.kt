@@ -44,6 +44,8 @@ class MemoryCell2 : ConstraintLayout {
     var leftFoot: Drawable?;
     var rightFoot: Drawable?;
 
+    var isBeingPressed = false
+
 
 
     private var Colors: IntArray = intArrayOf(
