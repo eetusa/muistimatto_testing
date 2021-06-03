@@ -105,7 +105,7 @@ abstract class Game : ViewModel() {
     fun touchUp(cell: MemoryCell2){
 
         if (cell.isBeingPressed){
-            
+
             cell.isBeingPressed = false
             cell.removeFoot()
         }

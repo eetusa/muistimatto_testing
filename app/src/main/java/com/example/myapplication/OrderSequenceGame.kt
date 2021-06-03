@@ -94,14 +94,10 @@ open class OrderSequenceGame : Game{
         elementSoundsArray.add(ArrayList<AssetFileDescriptor>()) // kirjain (a, b,..)
         elementSoundsArray.add(ArrayList<AssetFileDescriptor>()) // numero (1, 2,...)
         elementSoundsArray.add(ArrayList<AssetFileDescriptor>()) // symboli (vesi, tuli, valo, kivi)
+        elementSoundsArray.add(ArrayList<AssetFileDescriptor>()) // järjestys (ensimmäinen ruutu, toinen ruutu, ...)
 
-        orderSoundsArray.add(ArrayList<AssetFileDescriptor>()) // (ensimmäisen, toisen..)
-        orderSoundsArray.add(ArrayList<AssetFileDescriptor>()) // (ensimmäinen, toinen..)
-        orderSoundsArray.add(ArrayList<AssetFileDescriptor>()) // rivin
-        orderSoundsArray.add(ArrayList<AssetFileDescriptor>()) // ruutu
 
         var letters = arrayListOf<String>("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","x","y")
-
 
         try{
             elementSoundsArray[0].add(context.assets.openFd("sounds/keltainen.mp3"))
@@ -115,32 +111,22 @@ open class OrderSequenceGame : Game{
                 elementSoundsArray[1].add(context.assets.openFd("sounds/$letter.mp3"))
             }
 
-            for (i in 1..10){
+            for (i in 1..24){
                 elementSoundsArray[2].add(context.assets.openFd("sounds/$i.mp3"))
             }
-            elementSoundsArray[2].add(context.assets.openFd("sounds/toista.mp3"))
-            elementSoundsArray[2].add(context.assets.openFd("sounds/20.mp3"))
-
 
             elementSoundsArray[3].add(context.assets.openFd("sounds/valo.mp3"))
             elementSoundsArray[3].add(context.assets.openFd("sounds/kivi.mp3"))
             elementSoundsArray[3].add(context.assets.openFd("sounds/tuli.mp3"))
             elementSoundsArray[3].add(context.assets.openFd("sounds/vesi.mp3"))
 
-            orderSoundsArray[0].add(context.assets.openFd("sounds/ensimmaisen.mp3"))
-            orderSoundsArray[0].add(context.assets.openFd("sounds/toisen.mp3"))
-            orderSoundsArray[0].add(context.assets.openFd("sounds/kolmannen.mp3"))
-            orderSoundsArray[0].add(context.assets.openFd("sounds/neljannen.mp3"))
-            orderSoundsArray[0].add(context.assets.openFd("sounds/viidennen.mp3"))
-            orderSoundsArray[0].add(context.assets.openFd("sounds/kuudennen.mp3"))
-            orderSoundsArray[1].add(context.assets.openFd("sounds/ensimmainen.mp3"))
-            orderSoundsArray[1].add(context.assets.openFd("sounds/toinen.mp3"))
-            orderSoundsArray[1].add(context.assets.openFd("sounds/kolmas.mp3"))
-            orderSoundsArray[1].add(context.assets.openFd("sounds/neljas.mp3"))
-            orderSoundsArray[1].add(context.assets.openFd("sounds/viides.mp3"))
-            orderSoundsArray[1].add(context.assets.openFd("sounds/kuudes.mp3"))
-            orderSoundsArray[2].add(context.assets.openFd("sounds/rivin.mp3"))
-            orderSoundsArray[3].add(context.assets.openFd("sounds/ruutu.mp3"))
+            elementSoundsArray[4].add(context.assets.openFd("sounds/1ruutu.mp3"))
+            elementSoundsArray[4].add(context.assets.openFd("sounds/2ruutu.mp3"))
+            elementSoundsArray[4].add(context.assets.openFd("sounds/3ruutu.mp3"))
+            elementSoundsArray[4].add(context.assets.openFd("sounds/4ruutu.mp3"))
+
+
+
 
         } catch (e: java.lang.Exception){
             e.message?.let { Log.e("Sounds", it) }
@@ -433,6 +419,25 @@ open class OrderSequenceGame : Game{
 
         if (type == 0 || type == 3){
             playSound(elementSoundsArray[type], cell.colorIndex)
+        } else if (type == 1 || type == 2) {
+            playSound(elementSoundsArray[type], cell.index - 1)
+        } else if (type == 4){
+            playSound(elementSoundsArray[type], cell.column)
+        }
+    }
+
+    /*
+    private fun playSoundFromCell(cell: MemoryCell2, type: Int){
+
+        if (elementSoundsArray == null) return
+        if (elementSoundsArray.count() == 0) return
+
+        val toistaIndex = 10
+        val kaksikymmentaIndex = toistaIndex+1
+
+
+        if (type == 0 || type == 3){
+            playSound(elementSoundsArray[type], cell.colorIndex)
         } else if (type == 1) {
             playSound(elementSoundsArray[type], cell.index - 1)
         }else if (type == 2){
@@ -473,6 +478,8 @@ open class OrderSequenceGame : Game{
             }
         }
     }
+
+     */
 
     private fun showNextStepOnUI(arrayList: ArrayList<Int>, index: Int, cells: ArrayList<MemoryCell2>){
         val footview: TextView = activity.findViewById(R.id.whichSymbolsTextView)
