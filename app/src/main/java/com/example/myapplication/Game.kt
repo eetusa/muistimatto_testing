@@ -39,9 +39,10 @@ abstract class Game : ViewModel() {
 
      var indexOfLastClue = -1
 
-     @RequiresApi(Build.VERSION_CODES.O)
-     var startTime: Instant = Instant.now()
+
      var timerJob: Job? = null
+
+    var startTimeLong: Long = 0
 
      var Moves = ArrayList<Int>()
      var Points = 0
@@ -68,7 +69,7 @@ abstract class Game : ViewModel() {
           if (Streak > BestStreak) BestStreak = Streak
      }
 
-     @RequiresApi(Build.VERSION_CODES.O)
+
      fun correctMoveLogic(){
           Points++
           Streak++
@@ -76,7 +77,7 @@ abstract class Game : ViewModel() {
           updatePointsAndStreaks()
      }
 
-     @RequiresApi(Build.VERSION_CODES.O)
+
      fun incorrectMoveLogic(){
           resetStreak()
           updatePointsAndStreaks()
@@ -86,7 +87,7 @@ abstract class Game : ViewModel() {
           Streak = 0
      }
 
-     @RequiresApi(Build.VERSION_CODES.O)
+
      fun gameFinished(){
           var time = stopTimer()
           if (Moves.count() >= wholeStepSequence.count()) {
@@ -96,28 +97,32 @@ abstract class Game : ViewModel() {
      }
 
     fun touchDown(cell: MemoryCell2){
-        Log.i("touchDown",cell.index.toString() + " has been pressed")
+
         cell.isBeingPressed = true
+        clickReceiver(cell)
     }
 
     fun touchUp(cell: MemoryCell2){
 
         if (cell.isBeingPressed){
-            Log.i("touchDown",cell.index.toString() + " has been released")
+            
             cell.isBeingPressed = false
+            cell.removeFoot()
         }
     }
 
-     fun updateBestTime(time: Long){
+     private fun updateBestTime(time: Long){
           if (time < BestTime || BestTime == 0L){
                BestTime = time
 
           }
      }
 
-     @RequiresApi(Build.VERSION_CODES.O)
+
      fun startTimer(){
-         startTime = Instant.now()
+         startTimeLong = System.currentTimeMillis()
+
+         //startTime = Instant.now()
          writeToMidTopLeft("0.00")
          timerJob = viewModelScope.launch {
 
@@ -129,12 +134,13 @@ abstract class Game : ViewModel() {
          }
 
     }
-     @RequiresApi(Build.VERSION_CODES.O)
-     fun getTimeFromStart(): Long{
-          return Instant.now().toEpochMilli() - startTime.toEpochMilli()
+
+     private fun getTimeFromStart(): Long{
+         // return Instant.now().toEpochMilli() - startTime.toEpochMilli()
+         return (System.currentTimeMillis() - startTimeLong)
      }
 
-     @RequiresApi(Build.VERSION_CODES.O)
+
      fun millisecondsReFormat(timedif: Long): String{
           var td = timedif.toString()
           if (td.length>2){
@@ -154,14 +160,14 @@ abstract class Game : ViewModel() {
           if (spinner != null) spinner.visibility = GONE
      }
 
-     fun writeToMidTopLeft(time: String){
+     private fun writeToMidTopLeft(time: String){
           val footview: TextView = activity.findViewById(R.id.timerTextView)
 
           footview.text = time
 
      }
 
-     @RequiresApi(Build.VERSION_CODES.O)
+
      fun stopTimer(): Long{
           timerJob?.cancel()
           var time = getTimeFromStart()
@@ -203,7 +209,7 @@ abstract class Game : ViewModel() {
           }
           clearIndicatorRowsApartFrom(row)
      }
-     fun getOrderRow(): Int{
+     private fun getOrderRow(): Int{
           if (Moves.size < wholeStepSequence.size){
                return (wholeStepSequence[Moves.size]-1)/board.columns+1
           }
@@ -232,7 +238,7 @@ abstract class Game : ViewModel() {
                activity.findViewById<View>(R.id.testIndicator5).background = null
           }
      }
-     fun setIndicator(ind: View){
+     private fun setIndicator(ind: View){
           ind.background = ResourcesCompat.getDrawable(context.resources, R.drawable.row_indicator, null)
      }
      fun changeNewGameButton(){
@@ -247,7 +253,7 @@ abstract class Game : ViewModel() {
                }
           }
      }
-     @RequiresApi(Build.VERSION_CODES.O)
+
      fun updatePointsAndStreaks(){
           if (pointView == null)pointView = activity.findViewById(R.id.pointsAmount)
           if (streakView == null)streakView = activity.findViewById(R.id.streakAmount)

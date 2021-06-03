@@ -64,7 +64,7 @@ open class OrderSequenceGame : Game{
     var textcolor_selected: Int = 0
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     constructor(context: Context, activity: Activity, savedInstanceState: Bundle){
         this.context = context
         this.activity = activity
@@ -223,7 +223,7 @@ open class OrderSequenceGame : Game{
         return mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     fun initializeGame() {
         val mode: Int = settings.getInt("gamemode")
         val testLayout: LinearLayout = activity.findViewById(R.id.testLayout)
@@ -349,7 +349,7 @@ open class OrderSequenceGame : Game{
 
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     private fun compareStepThirdIteration(cell: MemoryCell2){
         clearPrintDebug()
         // printDebug(Moves.size.toString() + " " +wholeStepSequence.size.toString())
@@ -489,14 +489,14 @@ open class OrderSequenceGame : Game{
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     private fun correctCellClicked(cell: MemoryCell2){
         cell.flashCorrect()
         setFoot(cell)
         correctMoveLogic()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     private fun incorrectCellClicked(cell: MemoryCell2){
         val correctIndex = wholeStepSequence[Moves.size-1]
         board.Cells[correctIndex-1].flashCorrect()
@@ -528,7 +528,7 @@ open class OrderSequenceGame : Game{
         board.removeOldFeet()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     private fun newGame(){
         clearJobs()
         clearTimer()
@@ -553,7 +553,7 @@ open class OrderSequenceGame : Game{
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     fun stopGame(){
         clearJobs()
         stopTimer()
@@ -562,7 +562,7 @@ open class OrderSequenceGame : Game{
         clearIndicatorRowsApartFrom(-1)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     fun startGame() {
         gameOn = true
         startTimer()
@@ -570,7 +570,7 @@ open class OrderSequenceGame : Game{
         changeNewGameButton()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     override fun handleStartGameButton() {
         if (!gameOn){
             newGame()
@@ -599,7 +599,7 @@ open class OrderSequenceGame : Game{
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     private fun checkGameState(): String{
       //  changeNewGameButton()
         if (!gameOn && !gamePlayed) {
@@ -626,7 +626,7 @@ open class OrderSequenceGame : Game{
         return false
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     override fun gameEnd(){
         gameFinished()
         gameOn = false
@@ -641,7 +641,7 @@ open class OrderSequenceGame : Game{
 
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     override fun clickReceiver(cell: MemoryCell2){
 
         if (showStepsToggle(true)) {

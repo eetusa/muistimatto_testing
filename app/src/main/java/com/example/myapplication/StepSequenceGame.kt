@@ -45,7 +45,7 @@ class StepSequenceGame : Game{
     private var textcolorNonSelected: Int = 0
     private var textcolorSelected: Int = 0
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+
     constructor(context: Context, activity: Activity, savedInstanceState: Bundle){
         this.context = context
         this.activity = activity
@@ -191,7 +191,7 @@ class StepSequenceGame : Game{
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     private fun flashSequence(sequence: ArrayList<Int>, query: Boolean): Boolean{
 
         if (showingStepSequence == null){
@@ -230,7 +230,7 @@ class StepSequenceGame : Game{
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     private fun compareStepThirdIteration(cell: MemoryCell2){
         clearPrintDebug()
 
@@ -362,14 +362,14 @@ class StepSequenceGame : Game{
 
     }*/
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     private fun correctCellClicked(cell: MemoryCell2){
         cell.flashCorrect()
         correctMoveLogic()
         setFoot(wholeStepFooting[Moves.size-1], cell)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     private fun incorrectCellClicked(cell: MemoryCell2){
         //val convertedStep = wholeStepSequenceInRows[currentSequenceRow][stepsInCurrentCycle.size-1]
         incorrectMoveLogic()
@@ -416,7 +416,7 @@ class StepSequenceGame : Game{
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     fun newGame(){
         board.leftFoot = -1
         board.rightFoot = -1
@@ -439,7 +439,7 @@ class StepSequenceGame : Game{
         updatePointsAndStreaks()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     fun stopGame() {
         clearJobs()
         stopTimer()
@@ -447,15 +447,17 @@ class StepSequenceGame : Game{
         changeNewGameButton()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     fun startGame() {
         startTimer()
         gameOn = true
+        gamePaused = false
         changeNewGameButton()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     override fun handleStartGameButton() {
+        Log.i("start game button","gameOn: "+gameOn+" gamePaused: "+gamePaused)
         if (!gameOn){
             //newGame()
             startGame()
@@ -473,7 +475,7 @@ class StepSequenceGame : Game{
         timerJob?.cancel()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     override fun gameEnd() {
         gameFinished()
         Log.i("finished","game finished" + Moves.count())
@@ -483,10 +485,11 @@ class StepSequenceGame : Game{
         gamePaused = false
         gamePlayed = true
         changeNewGameButton()
+        Moves.clear()
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     private fun checkGameState(): String{
         //  changeNewGameButton()
         if (!gameOn && !gamePlayed) {
@@ -513,11 +516,11 @@ class StepSequenceGame : Game{
         return false
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     override fun showStepsToggle(query: Boolean): Boolean {
         return flashSequence(wholeStepSequence, query)
     }
-    @RequiresApi(Build.VERSION_CODES.O)
+
     override  fun  clickReceiver(cell: MemoryCell2){
 
 

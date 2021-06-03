@@ -31,8 +31,8 @@ class Board : LinearLayout {
             return temp[0] + this.measuredWidth/2
         }
 
-    private var Moves = ArrayList<Int>()
-    private var Points = 0
+   // private var Moves = ArrayList<Int>()
+   // private var Points = 0
     private var StepPercentage: Float = 0f
     var Cells = ArrayList<MemoryCell2>()
     var leftFoot = -1
@@ -50,10 +50,7 @@ class Board : LinearLayout {
                LinearLayout.LayoutParams.MATCH_PARENT,
                LinearLayout.LayoutParams.MATCH_PARENT
        )
-
-
         this.orientation = VERTICAL
-        this.Points = Points
         this.background = bg
         this.game = game;
         this.setPadding(20, 40, 40, 20)
@@ -61,23 +58,8 @@ class Board : LinearLayout {
         activityx = activity
         initBoard(context)
 
-
     }
 
-    fun compareStepSimple(index: Int, stepseq: IntArray){
-        if (index < stepseq.size){
-            if (stepseq[index - 1] == Moves[index - 1]){
-                StepCompared[index - 1] = 1
-                correctSteps++
-            }
-        }
-    }
-
-    fun calculateStepPercentage(){
-        var temp: Float = 0f
-        temp = correctSteps/(Moves.size.toFloat())
-        StepPercentage = temp*100
-    }
 
 
     fun setActiveCell(cell: MemoryCell2){
